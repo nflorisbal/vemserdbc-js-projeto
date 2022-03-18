@@ -112,6 +112,33 @@ const validarData = () => {
   }
   //#endregion Validação Data
 
+//#region Validação Senha
+const validarSenha = () => {
+    let senhaDigitada = document.getElementById('password-input-registration').value;
+    let listaCaracteres = senhaDigitada.split('');
+  
+    let letras = listaCaracteres.filter( char => char.toLowerCase() !== char.toUpperCase() );
+  
+    let possuiLetraMaiuscula = letras.some( l => l.toUpperCase() === l ); // "A".toUppercase() === "A"
+    let possuiLetraMinuscula = letras.some( l => l.toLowerCase() === l );
+  
+    let possuiCharEspecial = listaCaracteres.some( char => char.toLowerCase() === char.toUpperCase() && isNaN(parseInt(char)) );
+    let possuiNumero = listaCaracteres.some( char => char.toLowerCase() === char.toUpperCase() && !isNaN(parseInt(char)) );
+  
+    let possuiOitoCaracteres = senhaDigitada.length >= 8;
+  
+    let naoPossuiEspacos = !senhaDigitada.includes(' ');
+  
+    let ehValido = possuiOitoCaracteres && possuiLetraMaiuscula && possuiLetraMinuscula && 
+        possuiCharEspecial && possuiNumero && naoPossuiEspacos;
+  
+    // para setar o texto de erro em vermelho
+    let erroSenha = document.getElementById('password-registration-error');
+    erroSenha.setAttribute('class', ehValido ? 'd-none' : 'text-danger');
+  
+    return ehValido;
+  }
+  //#endregion Validação Senha
 
 
 
