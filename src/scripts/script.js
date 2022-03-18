@@ -112,6 +112,34 @@ const validarData = () => {
   }
   //#endregion Validação Data
 
+//#region Validação Email
+const validarEmail = () => {
+    let emailDigitado = document.getElementById('email-input-registration').value;
+    let listaCaracteres = emailDigitado.split(''); // [...emailDigitado]
+  
+    let emailSplit = emailDigitado.split('@');
+    
+    let possuiArroba = emailSplit.length > 1;
+  
+    let dominioEmail = possuiArroba ? emailSplit[1] : '';
+    let dominioEmailSplit = dominioEmail.split('.');
+  
+    let possuiPontosNoDominio = dominioEmailSplit.length > 1;
+  
+    let possuiCaracteresEntrePontos = dominioEmailSplit.every( d => d.length > 1 );
+  
+    let comecaComLetra = listaCaracteres.length ? listaCaracteres[0].toUpperCase() !== listaCaracteres[0].toLowerCase() : false;
+  
+    let ehValido = possuiArroba && possuiPontosNoDominio && possuiCaracteresEntrePontos && comecaComLetra;
+  
+    // para setar o texto de erro em vermelho
+    let erroEmail = document.getElementById('email-registration-error');
+    erroEmail.setAttribute('class', ehValido ? 'd-none' : 'text-danger');
+  
+    return ehValido;
+  }
+  //#endregion Validação Email
+
 //#region Validação Senha
 const validarSenha = () => {
     let senhaDigitada = document.getElementById('password-input-registration').value;
