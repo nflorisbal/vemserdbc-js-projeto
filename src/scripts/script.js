@@ -66,6 +66,33 @@ const esqueceuSenha = () => {
     // validar email digitado no input e retornar senha num alert
 }
 
+//#region Validação Nome
+const validarNome = () => {
+	const nomeInput = document.getElementById('nome-input-registration');
+	const nome = nomeInput.value;
+
+	let possuiSohLetras = [...nome].every(letra => letra.toLowerCase() !== letra.toUpperCase() || letra == ' ');
+
+	const ehValido = possuiSohLetras;
+
+	// para setar o texto de erro em vermelho
+	let erroNome = document.getElementById('nome-registration-error');
+	erroNome.setAttribute('class', ehValido ? 'd-none' : 'text-danger');
+
+	return ehValido;
+}
+
+const primeiraLetra = string => {
+	array = string.split(' ');
+
+	for (i in array) {
+		array[i] = array[i].charAt(0).toUpperCase() + array[i].slice(1);
+	}
+
+	return array.join(' ');
+}
+//#endregion Validação Nome
+
 //#region Validação Data
 const validarData = () => { 
     let inputData = document.getElementById('date-input-registration');
