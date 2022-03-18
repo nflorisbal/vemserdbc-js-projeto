@@ -1,3 +1,7 @@
+
+const USUARIOS_URL = 'http://localhost:3000/usuarios';
+const VAGAS_URL = 'http://localhost:3000/vagas';
+
 class Usuario {
     id;
     tipo;
@@ -5,10 +9,10 @@ class Usuario {
     dataNascimento;
     email;
     senha;
-    candidaturas = []; // lista de Candidatura
+    candidaturas = [];
 
-    constructor(id, tipo, nome, dataNascimento, email, senha) {
-        this.id = id;
+    constructor(tipo, nome, dataNascimento, email, senha) {
+        // this.id = id;
         this.tipo = tipo;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
@@ -64,6 +68,12 @@ const validarLogin = () => {
 
 const esqueceuSenha = () => {
     // validar email digitado no input e retornar senha num alert
+}
+
+const limparCampos = (...campos) => {
+	campos.forEach(e => {
+        e.value = '';
+    })
 }
 
 //#region Validação Nome
@@ -195,12 +205,35 @@ const validarSenha = () => {
   }
   //#endregion Validação Senha
 
+const validarCadastro = (event) => {
+    event.preventDefault();
+	let cadastroValido = validarNome() && validarData() && validarEmail() && validarSenha();
 
+	if (cadastroValido) {
+		cadastrarUsuario(event);
+	}
+}
 
+const cadastrarUsuario = (event) => {
+	event.preventDefault();
 
+    let tipo = document.getElementById("lista-tipo-usuario");
+	let nome = document.getElementById("nome-input-registration");
+	let dataNascimento = document.getElementById("date-input-registration");
+	let email = document.getElementById("email-input-registration");
+	let senha = document.getElementById("password-input-registration");
 
+	nome.value = primeiraLetra(nome.value);
 
+    const usuario = new Usuario(tipo.value, nome.value, dataNascimento.value, email.value, senha.value);
 
-const validarCadastro = () => {
-    // validar dados para cadastro do usuario
+	axios.post(USUARIOS_URL, usuario)
+		.then((resolve) => {
+			console.log(resolve.data);
+			irPara('registration', 'login');
+		}, (reject) => {
+			console.log("Problema encontrado, e agora? => ", reject);
+		});
+
+    limparCampos(tipo, nome, dataNascimento, email, senha);
 }
