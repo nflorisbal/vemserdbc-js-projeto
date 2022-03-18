@@ -9,10 +9,35 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <title>Projeto Final JS</title>
 </head>
-<body>
+<body style="height: 100vh;">
+    <div id="container" class="h-100 flex-column d-flex align-items-center justify-content-center">
 
 
+        <form id="login" class="d-flex w-50 pb-3 border border-dark rounded flex-column align-items-center justify-content-center">
+            <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
+                <span>Login do Sistema</span>
+            </div>
+        
+            <div class="p-3 d-flex flex-column">
+                <span>Email</span>
+                <input type="email" id="email-input-login">
+            </div>
+        
+            <div class="p-3 d-flex flex-column">
+                <span>Senha</span>
+                <input type="password" id="password-input-login">
+            </div>
+        
+            <div class="w-50 d-flex justify-content-center">
+                <button class="btn btn-dark w-50" type="button" onclick="validarLogin()">Login</button>
+            </div>
+        </form>
+        <div class="w-50 d-flex justify-content-between">
+            <button class="btn btn-link" type="button" onclick="irPara('login', 'registration')">Esqueceu a senha? </span>
+            <button class="btn btn-link" type="button" onclick="irPara('login', 'registration')">Não possui cadastro? </span>
+        </div>
 
+    </div>
     <script src="../node_modules/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" type="text/javascript"></script>
     <script src="../src/scripts/script.js"></script>
