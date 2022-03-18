@@ -1,7 +1,7 @@
 .form-select:focus,
 .form-select:active,
-.btn-primary:focus,
-.btn-primary:active{
+.btn:focus,
+.btn:active{
     box-shadow:none !important;
     outline:0px !important;
 }

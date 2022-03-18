@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "axios": "^0.26.1"
+  },
+  "scripts": {
+    "start:server": "json-server --watch ../services/db.json"
   }
 }

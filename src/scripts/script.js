@@ -17,8 +17,8 @@ class Usuario {
     }
 }
 
-// recebe as candidaturas do usuario e a vaga para qual se candidatou
 class Candidatura {
+    // recebe as candidaturas do usuario e a vaga para qual se candidatou
     idVaga;
     idCandidato;
     reprovado = false; 
@@ -56,4 +56,69 @@ const irPara = (origem, destino) => {
 
     alternarClasses(elementoOrigem, 'd-none', 'd-flex');
     alternarClasses(elementoDestino, 'd-none', 'd-flex');
+}
+
+const validarLogin = () => {
+    // validar botao login da tela principal
+}
+
+const esqueceuSenha = () => {
+    // validar email digitado no input e retornar senha num alert
+}
+
+//#region Validação Data
+const validarData = () => { 
+    let inputData = document.getElementById('date-input-registration');
+    let dataDigitada = inputData.value;
+  
+    adicionarMascaraData(inputData, dataDigitada);
+  
+    let dataConvertida = moment(dataDigitada, 'DDMMYYYY');
+  
+    let dezoitoAnosAtras = moment().diff(dataConvertida, 'years') >= 18;
+  
+    // comparações de data - date1.isBefore(date2)  /  date1.isAfter(date2)  /  date1.isSameOrBefore(date2)  /  date1.isSameOrAfter(date2)
+    let dataAnteriorHoje = dataConvertida.isBefore(moment());
+  
+    let ehValido = dataConvertida.isValid() && dataAnteriorHoje && dezoitoAnosAtras && dataDigitada.length === 10; // 10/05/2001
+  
+    // para setar o texto de erro em vermelho
+    let erroData = document.getElementById('date-registration-error');
+    erroData.setAttribute('class', ehValido ? 'd-none' : 'text-danger');
+  
+    return ehValido;
+  }
+  
+  const adicionarMascaraData = (input, data) => {
+    let listaCaracteres = [...data];
+    
+    let listaFiltrada = listaCaracteres.filter(c => !isNaN(parseInt(c)));
+    if(listaFiltrada && listaFiltrada.length) {
+        let dataDigitada = listaFiltrada.join('');
+  
+        const { length } = dataDigitada;
+  
+        switch(length) { 
+            case 0: case 1: case 2:
+                input.value = dataDigitada; 
+                break;
+            case 3: case 4:
+                input.value = `${dataDigitada.substring(0, 2)}/${dataDigitada.substring(2, 4)}`;
+                break;
+            default:
+                input.value = `${dataDigitada.substring(0, 2)}/${dataDigitada.substring(2, 4)}/${dataDigitada.substring(4, 8)}`;
+        }
+    }
+  }
+  //#endregion Validação Data
+
+
+
+
+
+
+
+
+const validarCadastro = () => {
+    // validar dados para cadastro do usuario
 }
