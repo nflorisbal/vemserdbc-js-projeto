@@ -1,0 +1,19 @@
+.form-select:focus,
+.form-select:active,
+.btn-primary:focus,
+.btn-primary:active{
+    box-shadow:none !important;
+    outline:0px !important;
+}
+
+ul {
+    list-style: none;
+}
+
+li:hover {
+    background-color: #cacaca;
+}
+
+.hover-vaga:hover {
+    background-color: #cacaca;
+}
