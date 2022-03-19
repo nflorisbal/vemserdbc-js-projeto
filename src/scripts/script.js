@@ -374,13 +374,14 @@ const validarLogin = async () => {
         const resolve = await axios.get(USUARIOS_URL);
             
         usuario = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
-        
+        // debugger;
         if (usuario === undefined)
             erro.classList.remove('d-none');
         else {
             limparCampos(email, senha);
             erro.classList.add('d-none');
             permissoesUsuario(usuario.tipo);
+            limparVagas();
             buscarVagas();
             irPara('login', 'list-jobs');
         }
@@ -393,8 +394,11 @@ const buscarVagas = async () => {
     try {
         const resolve = await axios.get(VAGAS_URL);
 
-        const ul = document.getElementById('ul-vagas');
-            
+        const div = document.getElementById('div-vagas');
+        const ul = document.createElement('ul');
+        ul.setAttribute('id', 'ul-vagas');
+        div.appendChild(ul);
+
         vagas = resolve.data.forEach(e => {
             const li = document.createElement('li');
             adicionarAtributos(li, `li-vaga-${e.id}`, CLASS_LI_VAGA);
@@ -410,4 +414,9 @@ const buscarVagas = async () => {
     } catch (erro) {
         console.log(`Ocorreu alguma erro a busca das vagas. (${erro})`);
     }
+}
+
+const limparVagas = () =>{
+    const ul = document.getElementById('ul-vagas');
+    ul.remove();
 }
