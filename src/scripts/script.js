@@ -3,7 +3,6 @@ const USUARIOS_URL = 'http://localhost:3000/usuarios';
 const VAGAS_URL = 'http://localhost:3000/vagas';
 const CLASS_LI_VAGA = [ 'd-flex', 'justify-content-between', 'border', 'border-dark', 'rounded', 'p-3', 'w-100' ];
 
-
 let permissaoUsuario;
 
 class Usuario {
@@ -320,12 +319,6 @@ const cadastrarVaga = (event) => {
 
     const vaga = new Vaga(titulo.value, descricao.value, remuneracao.value);
 
-    /*
-    <li id="li-vaga-1" class="d-flex justify-content-between border border-dark rounded p-3 w-100">
-                        <span><strong>Vaga: </strong>Dev Jr</span><span><strong>Salário:</strong> R$ 3.000,00</span>
-                    </li>
-    */
-
     axios.post(VAGAS_URL, vaga)
 		.then((resolve) => {
             console.log(resolve.data);
@@ -357,17 +350,20 @@ const validarLogin = async () => {
 	const senha = document.getElementById('password-input-login');
     const erro = document.getElementById('login-error');
 
-    const resolve = await axios.get(USUARIOS_URL);
-           
-    usuario = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
-    
-    if (usuario === undefined)
-        erro.classList.remove('d-none');
-    else {
-        limparCampos(email, senha);
-        erro.classList.add('d-none');
-        permissaoUsuario = resolve.tipo;
-        irPara('login', 'list-jobs');
-    }
+    try{
+        const resolve = await axios.get(USUARIOS_URL);
+            
+        usuario = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
         
+        if (usuario === undefined)
+            erro.classList.remove('d-none');
+        else {
+            limparCampos(email, senha);
+            erro.classList.add('d-none');
+            permissaoUsuario = resolve.tipo;
+            irPara('login', 'list-jobs');
+        }
+    } catch(erro) {
+        console.log(`Ocorreu alguma erro durante o login. (${erro})`);
+    }   
 }
