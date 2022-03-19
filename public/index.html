@@ -15,12 +15,13 @@
 
 <body style="height: 100vh;">
     <div id="container" class="h-100 flex-column d-flex align-items-center justify-content-center">
-        <!-- <div id="login" class="d-flex w-75 pb-3  rounded flex-column align-items-center">
+        <div id="login" class="d-flex w-75 pb-3  rounded flex-column align-items-center">
             <form 
                 class="d-flex w-50 pb-3 border border-dark rounded flex-column align-items-center justify-content-center">
                 <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
                     <span>LOGIN DO SISTEMA</span>
                 </div>
+                <span id="login-error" class="mt-3 text-danger d-none">Usuário inválido</span>
                 <div class="w-50 p-3 d-flex flex-column">
                     <span>Email</span>
                     <input type="email" id="email-input-login">
@@ -36,12 +37,12 @@
                 </div>
             </form>
             <div class="w-50 d-flex justify-content-between">
-                <button class="btn btn-link" type="button" onclick="esqueceuSenha()">Esqueceu a senha?</button>
-                <button class="btn btn-link" type="button" onclick="irPara('login', 'registration')">Não possui cadastro?</button>
+                <button class="btn btn-link text-decoration-none" type="button" onclick="esqueceuSenha()">Esqueceu a senha?</button>
+                <button class="btn btn-link text-decoration-none" type="button" onclick="irPara('login', 'registration')">Não possui cadastro?</button>
             </div>
-        </div> -->
+        </div>
 
-        <!-- <div id="registration"
+        <div id="registration"
             class="w-75 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-none">
             <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
                 <span>CADASTRO</span>
@@ -82,8 +83,8 @@
                 <button class="w-25 btn btn-ligth border-1 border-dark" type="button" onclick="irPara('registration', 'login')">Voltar</button>
                 <button class="w-25 btn btn-dark" type="button" onclick="validarCadastroUsuario(event)">Cadastrar</button>
             </div>
-        </div> -->
-        <!-- <div id="jobs-registration"
+        </div>
+        <div id="jobs-registration"
             class="w-75 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-none">
             <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
                 <span>CADASTRO DE VAGA</span>
@@ -106,10 +107,10 @@
                 <span id="remuneration-registration-error" class="d-none">Remuneração inválida</span>
             </div>
             <div class="w-75 d-flex justify-content-between mt-4">
-                <button class="w-25 btn btn-ligth border-1 border-dark" type="button" onclick="irPara('jobs-registration', 'recruter-jobs')">Voltar</button>
+                <button class="w-25 btn btn-ligth border-1 border-dark" type="button" onclick="irPara('jobs-registration', 'list-jobs')">Voltar</button>
                 <button class="w-25 btn btn-dark" type="button" onclick="validarCadastroVaga(event)">Cadastrar</button>
             </div>
-        </div> -->
+        </div>
         <!-- <div id="worker-jobs"
             class="w-50 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-flex">
             <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
@@ -123,21 +124,22 @@
             </div>
         </div> -->
 
-        <div id="recruter-jobs"
-            class="w-50 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-flex">
+        <div id="list-jobs"
+            class="w-75 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-none">
             <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
                 <span>VAGAS</span>
             </div>
             <div class="w-75 p-3 d-flex flex-column">
-                <ul>
-                    <li class="d-flex justify-content-between border border-dark rounded p-3 w-100">
-                        <span>Vaga: Dev Jr</span><span>Salário: R$ 3.000,00</span></div>
-                    </li>
+                <ul id="ul-vagas">
+                    <!-- <li id="li-vaga-1" class="d-flex justify-content-between border border-dark rounded p-3 w-100">
+                        <span><strong>Vaga: </strong>Dev Jr</span><span><strong>Salário:</strong> R$ 3.000,00</span>
+                    </li> -->
                 </ul>
             </div>
-            <div class="w-75 d-flex justify-content-between">
-                <button class="btn border-1 border-dark w-25" type="button" id="register-btn" onclick="">Sair</button>
-                <button class="btn btn-dark w-30" type="button" id="register-btn" onclick="irPara('recruter-jobs', 'jobs-registration')">Cadastrar Vaga</button>
+            <div class="w-75 p-3 d-flex justify-content-between">
+                <button class="btn btn-dark d-none" type="button" id="exit-btn-worker" onclick="irPara('list-jobs', 'login')">Sair</button>
+                <button class="btn border border-dark" type="button" id="exit-btn-recruter" onclick="irPara('list-jobs', 'login')">Sair</button>
+                <button class="btn btn-dark" type="button" id="register-btn" onclick="irPara('list-jobs', 'jobs-registration')">Cadastrar Vaga</button>
             </div>
         </div>
 

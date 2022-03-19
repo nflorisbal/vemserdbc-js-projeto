@@ -1,5 +1,10 @@
+
 const USUARIOS_URL = 'http://localhost:3000/usuarios';
 const VAGAS_URL = 'http://localhost:3000/vagas';
+const CLASS_LI_VAGA = [ 'd-flex', 'justify-content-between', 'border', 'border-dark', 'rounded', 'p-3', 'w-100' ];
+
+
+let permissaoUsuario;
 
 class Usuario {
     id;
@@ -48,6 +53,11 @@ class Vaga {
 }
 
 //#region Funções Utilitárias
+
+const adicionarAtributos = (elemento, id, classes) => {
+	elemento.setAttribute('id', id);
+	if(classes !== undefined) elemento.classList.add(...classes);
+}
 
 const alternarClasses = (elemento, ...classes) => {
     classes.forEach(classe => {
@@ -103,12 +113,13 @@ const primeiraLetra = string => {
 
 //#region Validação Nome
 const validarNome = () => {
-	const nomeInput = document.getElementById('nome-input-registration');
-	const nome = nomeInput.value;
+	let nomeInput = document.getElementById('nome-input-registration');
+	let nome = nomeInput.value;
 
 	let possuiSohLetras = [...nome].every(letra => letra.toLowerCase() !== letra.toUpperCase() || letra == ' ');
+    let naoEhVazio = nome !== '';
 
-	const ehValido = possuiSohLetras;
+	let ehValido = possuiSohLetras && naoEhVazio;
 
 	// para setar o texto de erro em vermelho
 	let erroNome = document.getElementById('nome-registration-error');
@@ -221,7 +232,7 @@ const validarSenha = () => {
   }
   //#endregion Validação Senha
 
-  //#endregion #region Validação Inputs Usuário
+//#endregion #region Validação Inputs Usuário
 
 //#region Validação Inputs Vaga
 
@@ -309,11 +320,54 @@ const cadastrarVaga = (event) => {
 
     const vaga = new Vaga(titulo.value, descricao.value, remuneracao.value);
 
+    /*
+    <li id="li-vaga-1" class="d-flex justify-content-between border border-dark rounded p-3 w-100">
+                        <span><strong>Vaga: </strong>Dev Jr</span><span><strong>Salário:</strong> R$ 3.000,00</span>
+                    </li>
+    */
+
     axios.post(VAGAS_URL, vaga)
 		.then((resolve) => {
+            console.log(resolve.data);
             
-			irPara('jobs-registration', 'recruter-jobs');
+            const ul = document.getElementById('ul-vagas');
+            const li = document.createElement('li');
+            
+            adicionarAtributos(li, `li-vaga-${resolve.id}`, CLASS_LI_VAGA);
+            ul.appendChild(li);
+
+            const spanTitulo = document.createElement('span');
+            const spanRemuneracao = document.createElement('span');
+            spanTitulo.textContent = `Vaga: ${resolve.data.titulo}`;
+            spanRemuneracao.textContent = `Remuneração: ${resolve.data.remuneracao}`;
+            li.append(spanTitulo, spanRemuneracao);
+
+            alert('Vaga cadastrada com sucesso!');
+
+			irPara('jobs-registration', 'list-jobs');
 		}, (reject) => {
-			console.log('Problema encontrado, e agora? => ', reject);
+			console.log(`Ocorreu alguma erro durante o cadastro da vaga. (${reject})`);
 		});
+    
+    limparCampos(titulo, descricao, remuneracao);
+}
+
+const validarLogin = async () => {
+    const email = document.getElementById('email-input-login');
+	const senha = document.getElementById('password-input-login');
+    const erro = document.getElementById('login-error');
+
+    const resolve = await axios.get(USUARIOS_URL);
+           
+    usuario = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
+    
+    if (usuario === undefined)
+        erro.classList.remove('d-none');
+    else {
+        limparCampos(email, senha);
+        erro.classList.add('d-none');
+        permissaoUsuario = resolve.tipo;
+        irPara('login', 'list-jobs');
+    }
+        
 }
