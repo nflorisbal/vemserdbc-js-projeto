@@ -282,9 +282,49 @@ const validarDescricao = () => {
 }
 
 const validarRemuneracao = () => {
-    // criar validação e mascara do campo
-    return true;
+    const remuneracaoInserida = document.getElementById('remuneration-input-registration');
+    const remuneracaoReal = remuneracaoInserida.value;
+
+    const erroremuneracao = document.getElementById('remuneration-registration-error');
+
+    mascaraRemuneracao(remuneracaoInserida, remuneracaoReal);
+
+    const remuneracaoSplit = [...remuneracaoReal];
+    const validTamanho = remuneracaoSplit.length >= 5;
+    const validMaiorzero = Math.max.apply(null, remuneracaoSplit);
+    const valid = validTamanho && validMaiorzero;
+    // para setar o texto de erro em vermelho
+    let erroDescricao = document.getElementById('remuneration-registration-error');
+    erroDescricao.setAttribute('class', ehValido ? 'd-none' : 'text-danger');
+
+    return valid;
 }
+
+const mascaraRemuneracao = (input, remuneracao) => {
+    let listaRemuneracao = [...remuneracao]
+  
+    let listaRemuneracaoFiltrada = listaRemuneracao.filter(
+      c => !isNaN(parseInt(c))
+    )
+    if (listaRemuneracaoFiltrada && listaRemuneracaoFiltrada.length) {
+      let listaDigitada = listaRemuneracaoFiltrada.join('')
+  
+      const { length } = listaDigitada
+  
+      switch (length) {
+        case 0:
+        case 1:
+        case 2:
+          input.value = `R$ ${listaDigitada}`
+          break
+        // case 3: case 4:
+        //     input.value = `R$ ${listaDigitada.substring(0, 2)},${listaDigitada.substring(2, 5)}`;
+        //     break;
+        // default:
+        //     input.value = `R$ ${listaDigitada.substring(0, 2)},${listaDigitada.substring(2, 5)}.${listaDigitada.substring(6, 9)}`;
+      }
+    }
+  }
 
 //#endregion Validação Inputs Vaga
 
@@ -375,7 +415,7 @@ const validarLogin = async () => {
         const resolve = await axios.get(USUARIOS_URL);
 
         usuario = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
-  
+
         if (usuario === undefined)
             erro.classList.remove('d-none');
         else {
