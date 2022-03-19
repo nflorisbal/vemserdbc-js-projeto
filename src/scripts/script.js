@@ -1,7 +1,7 @@
 
 const USUARIOS_URL = 'http://localhost:3000/usuarios';
 const VAGAS_URL = 'http://localhost:3000/vagas';
-const CLASS_LI_VAGA = [ 'd-flex', 'justify-content-between', 'border', 'border-dark', 'rounded', 'p-3', 'w-100' ];
+const CLASS_LI_VAGA = [ 'd-flex', 'justify-content-between', 'border', 'border-dark', 'rounded', 'p-3', 'w-100', 'mb-3' ];
 
 let permissaoUsuario;
 
@@ -107,12 +107,21 @@ const primeiraLetra = string => {
 }
 
 const permissoesUsuario = permissao => {
-    switch(permissao) {
+    const botoesCadastroVagas = document.getElementById('job-btns');
+    const botaoSairCadastroVagas = document.getElementById('exit-btn');
+    
+    switch(permissao) {        
         case '1':
-            alternarClasses(document.getElementById('job-btns'), 'justify-content-center', 'justify-content-between');
-            alternarClasses(document.getElementById('add-job-btn'), 'd-none');
+            botaoSairCadastroVagas.classList.add('btn-dark');
+            botoesCadastroVagas.classList.remove('justify-content-between');
+            botoesCadastroVagas.classList.add('justify-content-center');
+            document.getElementById('add-job-btn').classList.add('d-none');
             break;
         case '2':
+            botaoSairCadastroVagas.classList.remove('btn-dark');
+            botoesCadastroVagas.classList.add('justify-content-between');
+            botoesCadastroVagas.classList.remove('justify-content-center');
+            document.getElementById('add-job-btn').classList.remove('d-none');
             break;
     }
 }
@@ -372,9 +381,33 @@ const validarLogin = async () => {
             limparCampos(email, senha);
             erro.classList.add('d-none');
             permissoesUsuario(usuario.tipo);
+            buscarVagas();
             irPara('login', 'list-jobs');
         }
     } catch(erro) {
         console.log(`Ocorreu alguma erro durante o login. (${erro})`);
     }   
+}
+
+const buscarVagas = async () => {
+    try {
+        const resolve = await axios.get(VAGAS_URL);
+
+        const ul = document.getElementById('ul-vagas');
+            
+        vagas = resolve.data.forEach(e => {
+            const li = document.createElement('li');
+            adicionarAtributos(li, `li-vaga-${e.id}`, CLASS_LI_VAGA);
+            ul.appendChild(li);
+
+            const spanTitulo = document.createElement('span');
+            const spanRemuneracao = document.createElement('span');
+            spanTitulo.textContent = `Vaga: ${e.titulo}`;
+            spanRemuneracao.textContent = `Remuneração: ${e.remuneracao}`;
+            li.append(spanTitulo, spanRemuneracao);
+        })
+
+    } catch (erro) {
+        console.log(`Ocorreu alguma erro a busca das vagas. (${erro})`);
+    }
 }
