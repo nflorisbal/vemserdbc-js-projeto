@@ -106,6 +106,17 @@ const primeiraLetra = string => {
 	return array.join(' ');
 }
 
+const permissoesUsuario = permissao => {
+    switch(permissao) {
+        case '1':
+            alternarClasses(document.getElementById('job-btns'), 'justify-content-center', 'justify-content-between');
+            alternarClasses(document.getElementById('add-job-btn'), 'd-none');
+            break;
+        case '2':
+            break;
+    }
+}
+
 //#endregion Funções Utilitárias
 
 //#region Validação Inputs Usuário
@@ -360,7 +371,7 @@ const validarLogin = async () => {
         else {
             limparCampos(email, senha);
             erro.classList.add('d-none');
-            permissaoUsuario = resolve.tipo;
+            permissoesUsuario(usuario.tipo);
             irPara('login', 'list-jobs');
         }
     } catch(erro) {
