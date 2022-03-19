@@ -33,14 +33,14 @@ class Candidatura {
 }
 
 class Vaga {
-    id; //(automático json-server)
+    id;
     titulo;
     descricao;
     remuneracao; //(salvar no formato: R$ 3.200,50)
-    candidatos = []; // lista de Trabalhadores candidatados na vaga
+    candidatos = [];
 
-    constructor(id, titulo, descricao, remuneracao) {
-        this.id = id;
+    constructor(titulo, descricao, remuneracao) {
+        // this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.remuneracao = remuneracao;
@@ -224,6 +224,7 @@ const validarSenha = () => {
   //#endregion #region Validação Inputs Usuário
 
 //#region Validação Inputs Vaga
+
 const validarTitulo = () => {
 	const tituloInput = document.getElementById('title-input-registration');
 	const titulo = tituloInput.value;
@@ -249,6 +250,12 @@ const validarDescricao = () => {
 
 	return ehValido;
 }
+
+const validarRemuneracao = () => {
+    // criar validação e mascara do campo
+    return true;
+}
+
 //#endregion Validação Inputs Vaga
 
 const validarCadastroUsuario = (event) => {
@@ -263,11 +270,11 @@ const validarCadastroUsuario = (event) => {
 const cadastrarUsuario = (event) => {
 	event.preventDefault();
 
-    let tipo = document.getElementById("lista-tipo-usuario");
-	let nome = document.getElementById("nome-input-registration");
-	let dataNascimento = document.getElementById("date-input-registration");
-	let email = document.getElementById("email-input-registration");
-	let senha = document.getElementById("password-input-registration");
+    let tipo = document.getElementById('lista-tipo-usuario');
+	let nome = document.getElementById('nome-input-registration');
+	let dataNascimento = document.getElementById('date-input-registration');
+	let email = document.getElementById('email-input-registration');
+	let senha = document.getElementById('password-input-registration');
 
 	nome.value = primeiraLetra(nome.value);
 
@@ -278,7 +285,7 @@ const cadastrarUsuario = (event) => {
 			console.log(resolve.data);
 			irPara('registration', 'login');
 		}, (reject) => {
-			console.log("Problema encontrado, e agora? => ", reject);
+			console.log('Problema encontrado, e agora? => ', reject);
 		});
 
     limparCampos(tipo, nome, dataNascimento, email, senha);
@@ -286,7 +293,7 @@ const cadastrarUsuario = (event) => {
 
 const validarCadastroVaga = (event) => {
     event.preventDefault();
-	let cadastroValido = validarNome();
+	let cadastroValido = validarTitulo() && validarDescricao() && validarRemuneracao();
 
 	if (cadastroValido) {
 		cadastrarVaga(event);
@@ -295,4 +302,18 @@ const validarCadastroVaga = (event) => {
 
 const cadastrarVaga = (event) => {
     event.preventDefault();
+
+    let titulo = document.getElementById('title-input-registration');
+    let descricao = document.getElementById('description-textarea-registration');
+    let remuneracao = document.getElementById('remuneration-input-registration');
+
+    const vaga = new Vaga(titulo.value, descricao.value, remuneracao.value);
+
+    axios.post(VAGAS_URL, vaga)
+		.then((resolve) => {
+            
+			irPara('jobs-registration', 'recruter-jobs');
+		}, (reject) => {
+			console.log('Problema encontrado, e agora? => ', reject);
+		});
 }

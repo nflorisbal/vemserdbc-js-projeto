@@ -83,8 +83,8 @@
                 <button class="w-25 btn btn-dark" type="button" onclick="validarCadastroUsuario(event)">Cadastrar</button>
             </div>
         </div> -->
-        <div id="jobs-registration"
-            class="w-75 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-flex">
+        <!-- <div id="jobs-registration"
+            class="w-75 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-none">
             <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
                 <span>CADASTRO DE VAGA</span>
             </div>
@@ -109,7 +109,7 @@
                 <button class="w-25 btn btn-ligth border-1 border-dark" type="button" onclick="irPara('jobs-registration', 'recruter-jobs')">Voltar</button>
                 <button class="w-25 btn btn-dark" type="button" onclick="validarCadastroVaga(event)">Cadastrar</button>
             </div>
-        </div>
+        </div> -->
         <!-- <div id="worker-jobs"
             class="w-50 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-flex">
             <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
@@ -124,12 +124,16 @@
         </div> -->
 
         <div id="recruter-jobs"
-            class="w-50 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-none">
+            class="w-50 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-flex">
             <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
                 <span>VAGAS</span>
             </div>
             <div class="w-75 p-3 d-flex flex-column">
-                <div id="vaga-1" class="d-flex justify-content-between border border-dark rounded p-3 hover-vaga"><span>Vaga: Dev Jr</span><span>Salário: R$ 3.000,00</span></div>
+                <ul>
+                    <li class="d-flex justify-content-between border border-dark rounded p-3 w-100">
+                        <span>Vaga: Dev Jr</span><span>Salário: R$ 3.000,00</span></div>
+                    </li>
+                </ul>
             </div>
             <div class="w-75 d-flex justify-content-between">
                 <button class="btn border-1 border-dark w-25" type="button" id="register-btn" onclick="">Sair</button>

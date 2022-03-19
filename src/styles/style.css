@@ -8,12 +8,9 @@
 
 ul {
     list-style: none;
+    padding-left: 0 !important;
 }
 
 li:hover {
-    background-color: #d8d8d8;
-}
-
-.hover-vaga:hover {
     background-color: #d8d8d8;
 }
