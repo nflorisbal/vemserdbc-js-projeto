@@ -86,7 +86,7 @@ const esqueceuSenha = async () => {
             alert(`Senha recuperada!\n\nUsuário: ${usuario.email}\nSenha: ${usuario.senha}`);
 
     } catch(erro) {
-        console.log(`Ocorreu alguma erro durante a recuperação da senha. (${erro})`);
+        console.log(`Ocorreu algum erro durante a recuperação da senha. (${erro})`);
     }
 }
 
@@ -295,7 +295,7 @@ const cadastrarUsuario = (event) => {
 			console.log(resolve.data);
 			irPara('registration', 'login');
 		}, (reject) => {
-			console.log('Problema encontrado, e agora? => ', reject);
+			console.log(`Ocorreu algum erro durante o cadastro do usuário. (${reject})`);
 		});
 
     limparCampos(tipo, nome, dataNascimento, email, senha);
@@ -326,7 +326,7 @@ const cadastrarVaga = (event) => {
             const ul = document.getElementById('ul-vagas');
             const li = document.createElement('li');
             
-            adicionarAtributos(li, `li-vaga-${resolve.id}`, CLASS_LI_VAGA);
+            adicionarAtributos(li, `li-vaga-${resolve.data.id}`, CLASS_LI_VAGA);
             ul.appendChild(li);
 
             const spanTitulo = document.createElement('span');
@@ -339,7 +339,7 @@ const cadastrarVaga = (event) => {
 
 			irPara('jobs-registration', 'list-jobs');
 		}, (reject) => {
-			console.log(`Ocorreu alguma erro durante o cadastro da vaga. (${reject})`);
+			console.log(`Ocorreu algum erro durante o cadastro da vaga. (${reject})`);
 		});
     
     limparCampos(titulo, descricao, remuneracao);
