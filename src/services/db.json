@@ -8,15 +8,6 @@
       "senha": "Abc@1234",
       "candidaturas": [],
       "id": 1
-    },
-    {
-      "tipo": "1",
-      "nome": "Nelson Santos Florisbal",
-      "dataNascimento": "18/10/1985",
-      "email": "florisbal@gmail.com",
-      "senha": "Abc@1234",
-      "candidaturas": [],
-      "id": 2
     }
   ],
   "vagas": []

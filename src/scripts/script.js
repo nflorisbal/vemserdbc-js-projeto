@@ -1,4 +1,3 @@
-
 const USUARIOS_URL = 'http://localhost:3000/usuarios';
 const VAGAS_URL = 'http://localhost:3000/vagas';
 
@@ -66,8 +65,24 @@ const validarLogin = () => {
     // validar botao login da tela principal
 }
 
-const esqueceuSenha = () => {
+const esqueceuSenha = async () => {
     // validar email digitado no input e retornar senha num alert
+    const email = document.getElementById('email-input-login');
+
+    try {
+        // debugger;
+        const resolve = await axios.get(USUARIOS_URL);
+        
+        const usuario = resolve.data.find(e => e.email === email.value);
+
+        if(usuario === undefined)
+            alert('Usuário inválido.')
+        else
+            alert(`Senha recuperada!\n\nUsuário: ${usuario.email}\nSenha: ${usuario.senha}`);
+
+    } catch(erro) {
+        console.log('Ocorreu alguma erro durante a recuperação da senha.', erro);
+    }
 }
 
 const limparCampos = (...campos) => {
