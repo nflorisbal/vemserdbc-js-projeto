@@ -47,6 +47,8 @@ class Vaga {
     }
 }
 
+//#region Funções Utilitárias
+
 const alternarClasses = (elemento, ...classes) => {
     classes.forEach(classe => {
         elemento.classList.toggle(classe);
@@ -61,27 +63,21 @@ const irPara = (origem, destino) => {
     alternarClasses(elementoDestino, 'd-none', 'd-flex');
 }
 
-const validarLogin = () => {
-    // validar botao login da tela principal
-}
-
 const esqueceuSenha = async () => {
-    // validar email digitado no input e retornar senha num alert
     const email = document.getElementById('email-input-login');
 
     try {
-        // debugger;
         const resolve = await axios.get(USUARIOS_URL);
         
         const usuario = resolve.data.find(e => e.email === email.value);
 
         if(usuario === undefined)
-            alert('Usuário inválido.')
+            alert('E-mail do usuário não localizado.')
         else
             alert(`Senha recuperada!\n\nUsuário: ${usuario.email}\nSenha: ${usuario.senha}`);
 
     } catch(erro) {
-        console.log('Ocorreu alguma erro durante a recuperação da senha.', erro);
+        console.log(`Ocorreu alguma erro durante a recuperação da senha. (${erro})`);
     }
 }
 
@@ -90,6 +86,20 @@ const limparCampos = (...campos) => {
         e.value = '';
     })
 }
+
+const primeiraLetra = string => {
+	array = string.split(' ');
+
+	for (i in array) {
+		array[i] = array[i].charAt(0).toUpperCase() + array[i].slice(1);
+	}
+
+	return array.join(' ');
+}
+
+//#endregion Funções Utilitárias
+
+//#region Validação Inputs Usuário
 
 //#region Validação Nome
 const validarNome = () => {
@@ -107,15 +117,6 @@ const validarNome = () => {
 	return ehValido;
 }
 
-const primeiraLetra = string => {
-	array = string.split(' ');
-
-	for (i in array) {
-		array[i] = array[i].charAt(0).toUpperCase() + array[i].slice(1);
-	}
-
-	return array.join(' ');
-}
 //#endregion Validação Nome
 
 //#region Validação Data
@@ -220,7 +221,37 @@ const validarSenha = () => {
   }
   //#endregion Validação Senha
 
-const validarCadastro = (event) => {
+  //#endregion #region Validação Inputs Usuário
+
+//#region Validação Inputs Vaga
+const validarTitulo = () => {
+	const tituloInput = document.getElementById('title-input-registration');
+	const titulo = tituloInput.value;
+
+	const ehValido = titulo !== '';
+
+	// para setar o texto de erro em vermelho
+	let erroTitulo = document.getElementById('title-registration-error');
+	erroTitulo.setAttribute('class', ehValido ? 'd-none' : 'text-danger');
+
+	return ehValido;
+}
+
+const validarDescricao = () => {
+	const descricaoTextarea = document.getElementById('description-textarea-registration');
+	const descricao = descricaoTextarea.value;
+
+	const ehValido = descricao !== '';
+
+	// para setar o texto de erro em vermelho
+	let erroDescricao = document.getElementById('description-registration-error');
+	erroDescricao.setAttribute('class', ehValido ? 'd-none' : 'text-danger');
+
+	return ehValido;
+}
+//#endregion Validação Inputs Vaga
+
+const validarCadastroUsuario = (event) => {
     event.preventDefault();
 	let cadastroValido = validarNome() && validarData() && validarEmail() && validarSenha();
 
@@ -251,4 +282,17 @@ const cadastrarUsuario = (event) => {
 		});
 
     limparCampos(tipo, nome, dataNascimento, email, senha);
+}
+
+const validarCadastroVaga = (event) => {
+    event.preventDefault();
+	let cadastroValido = validarNome();
+
+	if (cadastroValido) {
+		cadastrarVaga(event);
+	}
+}
+
+const cadastrarVaga = (event) => {
+    event.preventDefault();
 }
