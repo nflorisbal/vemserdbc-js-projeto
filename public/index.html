@@ -113,8 +113,7 @@
             </div>
         </div>
 
-        <div id="list-jobs"
-            class="w-75 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-none">
+        <div id="list-jobs" class="w-75 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-none">
             <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
                 <span>VAGAS</span>
             </div>
@@ -128,15 +127,12 @@
             </div>
         </div>
 
-        <div id="jobs-description"
-            class="w-75 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-none">
+        <div id="jobs-details" class="w-75 pb-3 border border-dark rounded flex-column align-items-center justify-content-center d-none">
             <div class="bg bg-dark w-100 h-100 text-center p-2 text-white">
                 <span>DETALHE DA VAGAS</span>
             </div>
-            <div id="jobs-content-description" class="w-75 p-3 d-flex flex-column border border-dark rounded mt-4 align-content-center">
-                <!-- <p>Titulo</p>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Est debitis corrupti labore voluptas optio possimus quod pariatur ullam, ea fuga aliquid quisquam cumque ipsam? Error, eaque? Quae hic dolorem neque.</p>
-                <p>Remuneração</p> -->
+            <div id="jobs-content-position" class="w-75">
+                <div id="jobs-content-details"></div>
             </div>
             <div class="w-100 h-100 text-center m-4">
                 <h4>Candidatos na Vaga</h4>
@@ -149,11 +145,10 @@
                 </div>
             </div>
             <div class="w-75 p-3 d-flex justify-content-between">
-                <button class="btn border border-dark" type="button" id="exit-btn" onclick="irPara('jobs-description', 'list-jobs')">Voltar</button>
-                <button class="btn btn-dark" type="button" id="add-job-btn" onclick="irPara('jobs-description', 'jobs-registration')">Cadastrar Vaga</button>
+                <button class="btn border border-dark" type="button" id="btn-back-job-details">Voltar</button>
+                <button class="btn btn-dark" type="button" id="btn-remove-job">Excluir Vaga</button>
             </div>
         </div>
-
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

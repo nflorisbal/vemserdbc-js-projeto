@@ -2,6 +2,7 @@
 const USUARIOS_URL = 'http://localhost:3000/usuarios';
 const VAGAS_URL = 'http://localhost:3000/vagas';
 const CLASS_LI_VAGA = ['d-flex', 'justify-content-between', 'border', 'border-dark', 'rounded', 'p-3', 'w-100', 'mb-3'];
+const CLASS_DIV_VAGA = ['w-100', 'p-3', 'd-flex', 'flex-column', 'border', 'border-dark', 'rounded', 'mt-4', 'align-content-center'];
 
 let permissaoUsuario;
 
@@ -94,6 +95,11 @@ const limparCampos = (...campos) => {
     campos.forEach(e => {
         e.value = '';
     })
+}
+
+const apagarComponentes = (elemento) => {
+    const componente = document.getElementById(elemento);
+    componente.remove();
 }
 
 const primeiraLetra = string => {
@@ -282,22 +288,22 @@ const validarDescricao = () => {
 }
 
 const validarRemuneracao = () => {
-    const remuneracaoInserida = document.getElementById('remuneration-input-registration');
-    const remuneracaoReal = remuneracaoInserida.value;
+    // debugger;
+    // const remuneracaoInserida = document.getElementById('remuneration-input-registration');
+    // const remuneracaoReal = remuneracaoInserida.value;
 
-    const erroremuneracao = document.getElementById('remuneration-registration-error');
+    // mascaraRemuneracao(remuneracaoInserida, remuneracaoReal);
 
-    mascaraRemuneracao(remuneracaoInserida, remuneracaoReal);
+    // const remuneracaoSplit = [...remuneracaoReal];
+    // const validTamanho = remuneracaoSplit.length >= 5;
+    // const validMaiorzero = Math.max.apply(null, remuneracaoSplit);
+    // const valid = validTamanho && validMaiorzero;
+    
+    // // para setar o texto de erro em vermelho
+    // let erroRemuneracao = document.getElementById('remuneration-registration-error');
+    // erroRemuneracao.setAttribute('class', valid ? 'd-none' : 'text-danger');
 
-    const remuneracaoSplit = [...remuneracaoReal];
-    const validTamanho = remuneracaoSplit.length >= 5;
-    const validMaiorzero = Math.max.apply(null, remuneracaoSplit);
-    const valid = validTamanho && validMaiorzero;
-    // para setar o texto de erro em vermelho
-    let erroDescricao = document.getElementById('remuneration-registration-error');
-    erroDescricao.setAttribute('class', ehValido ? 'd-none' : 'text-danger');
-
-    return valid;
+    return true;
 }
 
 const mascaraRemuneracao = (input, remuneracao) => {
@@ -328,7 +334,31 @@ const mascaraRemuneracao = (input, remuneracao) => {
 
 //#endregion Validação Inputs Vaga
 
-const validarCadastroUsuario = (event) => {
+const validarLogin = async () => {
+    const email = document.getElementById('email-input-login');
+    const senha = document.getElementById('password-input-login');
+    const erro = document.getElementById('login-error');
+
+    try {
+        const resolve = await axios.get(USUARIOS_URL);
+
+        let usuario = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
+
+        if (usuario === undefined)
+            erro.classList.remove('d-none');
+        else {
+            limparCampos(email, senha);
+            erro.classList.add('d-none');
+            permissoesUsuario(usuario.tipo);
+            buscarVagas();
+            irPara('login', 'list-jobs');
+        }
+    } catch (erro) {
+        console.log(`Ocorreu alguma erro durante o login. (${erro})`);
+    }
+}
+
+const validarCadastroUsuario = event => {
     event.preventDefault();
     let cadastroValido = validarNome() && validarData() && validarEmail() && validarSenha();
 
@@ -337,7 +367,7 @@ const validarCadastroUsuario = (event) => {
     }
 }
 
-const cadastrarUsuario = (event) => {
+const cadastrarUsuario = event => {
     event.preventDefault();
 
     let tipo = document.getElementById('lista-tipo-usuario');
@@ -361,7 +391,7 @@ const cadastrarUsuario = (event) => {
     limparCampos(tipo, nome, dataNascimento, email, senha);
 }
 
-const validarCadastroVaga = (event) => {
+const validarCadastroVaga = event => {
     event.preventDefault();
     let cadastroValido = validarTitulo() && validarDescricao() && validarRemuneracao();
 
@@ -370,7 +400,7 @@ const validarCadastroVaga = (event) => {
     }
 }
 
-const cadastrarVaga = (event) => {
+const cadastrarVaga = event => {
     event.preventDefault();
 
     let titulo = document.getElementById('title-input-registration');
@@ -406,32 +436,9 @@ const cadastrarVaga = (event) => {
     limparCampos(titulo, descricao, remuneracao);
 }
 
-const validarLogin = async () => {
-    const email = document.getElementById('email-input-login');
-    const senha = document.getElementById('password-input-login');
-    const erro = document.getElementById('login-error');
-
-    try {
-        const resolve = await axios.get(USUARIOS_URL);
-
-        usuario = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
-
-        if (usuario === undefined)
-            erro.classList.remove('d-none');
-        else {
-            limparCampos(email, senha);
-            erro.classList.add('d-none');
-            permissoesUsuario(usuario.tipo);
-            limparVagas();
-            buscarVagas();
-            irPara('login', 'list-jobs');
-        }
-    } catch (erro) {
-        console.log(`Ocorreu alguma erro durante o login. (${erro})`);
-    }
-}
-
 const buscarVagas = async () => {
+    apagarComponentes('ul-vagas');
+
     try {
         const resolve = await axios.get(VAGAS_URL);
 
@@ -457,34 +464,48 @@ const buscarVagas = async () => {
     }
 }
 
-const limparVagas = (element) => {
-    const ul = document.getElementById('ul-vagas');
-    ul.remove();
-}
-
-const detalharVaga = async (event) => {
+const detalharVaga = async event => {
     const id = event.target.id;
     const idSplit = id.split('-');
     const idElemento = idSplit[idSplit.length - 1];
-
+    
     try {
-        const resolve = await axios.get(VAGAS_URL);
-        const vaga = resolve.data.find(e => e.id === parseInt(idElemento));
-
-        const div = document.getElementById('jobs-content-description');
+        const resolve = await axios.get(`${VAGAS_URL}/${idElemento}`);
+     
+        const div = document.getElementById('jobs-content-position');
+        const divVaga = document.createElement('div');
+        adicionarAtributos(divVaga, `jobs-content-details-${resolve.data.id}`, CLASS_DIV_VAGA);
+        div.appendChild(divVaga);
+        
         const pTitulo = document.createElement('p');
         const pDescricao = document.createElement('p');
         const pRemuneracao = document.createElement('p');
+        pTitulo.textContent = `Titulo: ${resolve.data.titulo}`;
+        pDescricao.textContent = `Descrição: ${resolve.data.descricao}`;
+        pRemuneracao.textContent = `Remuneração: ${resolve.data.remuneracao}`;
+        
+        divVaga.append(pTitulo, pDescricao, pRemuneracao);
 
-        pTitulo.textContent = `Titulo: ${vaga.titulo}`;
-        pDescricao.textContent = `Descrição: ${vaga.descricao}`;
-        pRemuneracao.textContent = `Remuneração: ${vaga.remuneracao}`;
-
-        div.append(pTitulo, pDescricao, pRemuneracao);
+        const btnExcluirVaga = document.getElementById('btn-remove-job');
+        const btnVoltar = document.getElementById('btn-back-job-details');
+        btnExcluirVaga.addEventListener('click', () => excluirVaga(resolve.data));
+        btnVoltar.addEventListener('click', detalharVaga);
 
     } catch (erro) {
         console.log(`Ocorreu alguma erro ao detalhar a vaga. (${erro})`);
     }
 
-    irPara('list-jobs', 'jobs-description');
+    irPara('list-jobs', 'jobs-details');
+}
+
+const excluirVaga = async vaga => {
+    try {
+        const resolve = await axios.delete(`${VAGAS_URL}/${vaga.id}`);
+        console.log(resolve);
+        const li = document.getElementById(`li-vaga-${vaga.id}`);
+        li.remove();
+        irPara('jobs-details', 'list-jobs');
+    } catch (erro) {
+        console.log(`Ocorreu alguma erro ao excluir a vaga. (${erro})`);
+    }
 }
