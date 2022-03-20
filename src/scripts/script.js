@@ -121,7 +121,6 @@ const primeiraLetra = string => {
 const permissoesUsuario = permissao => {
     const botoesCadastroVagas = document.getElementById('job-btns');
     const botaoSairCadastroVagas = document.getElementById('exit-btn');
-    // const botaoExcluirVaga = document.getElementById('btn-remove-job');
 
     switch (permissao) {
         case '1':
@@ -458,8 +457,12 @@ const buscarVagas = async () => {
             adicionarAtributos(li, `li-vaga-${e.id}`, CLASS_LI_VAGA);
             li.addEventListener('click', detalharVaga); 
             const spanTitulo = document.createElement('span');
-            const spanRemuneracao = document.createElement('span');
+            spanTitulo.setAttribute('id', `span-titulo-${e.id}`)
+            // spanTitulo.addEventListener('click', detalharVaga);
             spanTitulo.textContent = `Vaga: ${e.titulo}`;
+            const spanRemuneracao = document.createElement('span');
+            spanRemuneracao.setAttribute('id', `span-remuneracao-${e.id}`)
+            // spanRemuneracao.addEventListener('click', detalharVaga);
             spanRemuneracao.textContent = `Remuneração: ${e.remuneracao}`;
             ul.appendChild(li);
             li.append(spanTitulo, spanRemuneracao);         
@@ -517,6 +520,9 @@ const candidatarVaga = () => {
     usuarioLogado.candidaturas.push(candidatura);
     vagaSelecionada.candidatos.push(candidatura);
 
+    console.log(usuarioLogado);
+    console.log(vagaSelecionada);
+
     axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
         console.log(resolve.data);
     }, reject => {
@@ -563,8 +569,10 @@ const trocarFuncionalidadeBotoes = () => {
     if(vagaSelecionada.candidatos.some(e => e.idCandidato === usuarioLogado.id)) {
         btnCandidatar.textContent = 'Cancelar Candidatura';
         btnCandidatar.addEventListener('click', removerCandidatura);
-    } else {
+    } else if(usuarioLogado.tipo == '1') {
         btnCandidatar.textContent = 'Candidatar-se';
         btnCandidatar.addEventListener('click', candidatarVaga);
+    } else {
+        btnCandidatar.classList.add('d-none');
     }
 }
