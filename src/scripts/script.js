@@ -6,7 +6,7 @@ const CLASS_DIV_VAGA = ['w-100', 'p-3', 'd-flex', 'flex-column', 'border', 'bord
 
 // variáveis globais
 let permissaoUsuario;
-let vagaIdGlobal = 0;
+let vagaGlobal;
 
 class Usuario {
     id;
@@ -46,8 +46,8 @@ class Vaga {
     remuneracao; //(salvar no formato: R$ 3.200,50)
     candidatos = [];
 
-    constructor(titulo, descricao, remuneracao) {
-        // this.id = id;
+    constructor(id, titulo, descricao, remuneracao) {
+        this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.remuneracao = remuneracao;
@@ -408,7 +408,7 @@ const cadastrarVaga = event => {
     let descricao = document.getElementById('description-textarea-registration');
     let remuneracao = document.getElementById('remuneration-input-registration');
 
-    const vaga = new Vaga(titulo.value, descricao.value, remuneracao.value);
+    const vaga = new Vaga(undefined, titulo.value, descricao.value, remuneracao.value);
 
     axios.post(VAGAS_URL, vaga)
         .then((resolve) => {
@@ -476,7 +476,6 @@ const detalharVaga = async event => {
     while(div.firstChild) div.removeChild(div.firstChild);
 
     await axios.get(`${VAGAS_URL}/${idElemento}`).then(resolve => {       
-        
         const divVaga = document.createElement('div');
         adicionarAtributos(divVaga, `jobs-content-details-${resolve.data.id}`, CLASS_DIV_VAGA);
         div.appendChild(divVaga);
@@ -488,20 +487,23 @@ const detalharVaga = async event => {
         pDescricao.textContent = `Descrição: ${resolve.data.descricao}`;
         pRemuneracao.textContent = `Remuneração: ${resolve.data.remuneracao}`;
         divVaga.append(pTitulo, pDescricao, pRemuneracao);
-        vagaIdGlobal = resolve.data.id;
+        
+        vagaGlobal = resolve.data;
     }, reject => {
         console.log(`Ocorreu algum erro ao detalhar a vaga. (${reject})`);
     });
 }
 
 const excluirVaga = async () => {
-    await axios.get(`${VAGAS_URL}/${vagaIdGlobal}`).then(resolve => {
-        if (confirm(`Deseja remover a vaga ${resolve.data.titulo}?`)) {
-            const li = document.getElementById(`li-vaga-${resolve.data.id}`);
+    if (confirm(`Deseja remover a vaga ${vagaGlobal.titulo}?`)) {
+        await axios.delete(`${VAGAS_URL}/${vagaGlobal.id}`).then(resolve => {
+            console.log(resolve);
+            debugger;
+            const li = document.getElementById(`li-vaga-${vagaGlobal.id}`);
             li.remove();
             irPara('jobs-details', 'list-jobs');
-        }
-    }, reject => {
-        console.log(`Ocorreu algum erro ao excluir a vaga. (${reject})`);
-    });
+        }, reject => {
+            console.log(`Ocorreu algum erro ao excluir a vaga. (${reject})`);
+        });
+    }
 }
