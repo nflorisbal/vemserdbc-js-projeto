@@ -1,9 +1,10 @@
-
 // constantes globais
 const USUARIOS_URL = 'http://localhost:3000/usuarios';
 const VAGAS_URL = 'http://localhost:3000/vagas';
 const CLASS_LI_VAGA = ['d-flex', 'justify-content-between', 'border', 'border-dark', 'rounded', 'p-3', 'w-100', 'mb-3'];
 const CLASS_DIV_VAGA = ['w-100', 'p-3', 'd-flex', 'flex-column', 'border', 'border-dark', 'rounded', 'mt-4', 'align-content-center'];
+const CLASS_DIV_CANDIDATO = ['row', 'd-flex', 'justify-content-between', 'w-100', 'border-bottom', 'border-dark', 'pb-2', 'pt-2', 'align-items-center'];
+const CLASS_DIV_CANDIDATOS = ['border', 'border-dark', 'border-bottom-0', 'w-75', 'text-center', 'justify-content-between', 'd-flex', 'flex-column', 'align-items-center', 'mb-2']
 
 // variáveis globais
 let permissaoUsuario;
@@ -101,6 +102,16 @@ const limparCampos = (...campos) => {
     campos.forEach(e => {
         e.value = '';
     })
+}
+
+const voltarCadastro = () => {
+    document.getElementById('lista-tipo-usuario').value = '';
+    document.getElementById('nome-input-registration').value = '';
+    document.getElementById('date-input-registration').value = '';
+    document.getElementById('email-input-registration').value = '';
+    document.getElementById('password-input-registration').value = '';
+
+    irPara('registration', 'login')
 }
 
 // const apagarComponentes = (elemento) => {
@@ -296,22 +307,22 @@ const validarDescricao = () => {
 }
 
 const validarRemuneracao = () => {
-    // debugger;
-    // const remuneracaoInserida = document.getElementById('remuneration-input-registration');
-    // const remuneracaoReal = remuneracaoInserida.value;
+    const remuneracaoInserida = document.getElementById(
+        'remuneration-input-registration'
+    )
+    const remuneracaoReal = remuneracaoInserida.value
 
-    // mascaraRemuneracao(remuneracaoInserida, remuneracaoReal);
+    mascaraRemuneracao(remuneracaoInserida, remuneracaoReal)
 
-    // const remuneracaoSplit = [...remuneracaoReal];
-    // const validTamanho = remuneracaoSplit.length >= 5;
-    // const validMaiorzero = Math.max.apply(null, remuneracaoSplit);
-    // const valid = validTamanho && validMaiorzero;
+    const remuneracaoSplit = [...remuneracaoReal]
+    const valid = remuneracaoSplit.length >= 7
+    // para setar o texto de erro em vermelho
+    const erroRemuneracao = document.getElementById(
+        'remuneration-registration-error'
+    )
+    erroRemuneracao.setAttribute('class', valid ? 'd-none' : 'text-danger')
 
-    // // para setar o texto de erro em vermelho
-    // let erroRemuneracao = document.getElementById('remuneration-registration-error');
-    // erroRemuneracao.setAttribute('class', valid ? 'd-none' : 'text-danger');
-
-    return true;
+    return valid
 }
 
 const mascaraRemuneracao = (input, remuneracao) => {
@@ -331,11 +342,6 @@ const mascaraRemuneracao = (input, remuneracao) => {
             case 2:
                 input.value = `R$ ${listaDigitada}`
                 break
-            // case 3: case 4:
-            //     input.value = `R$ ${listaDigitada.substring(0, 2)},${listaDigitada.substring(2, 5)}`;
-            //     break;
-            // default:
-            //     input.value = `R$ ${listaDigitada.substring(0, 2)},${listaDigitada.substring(2, 5)}.${listaDigitada.substring(6, 9)}`;
         }
     }
 }
@@ -343,7 +349,7 @@ const mascaraRemuneracao = (input, remuneracao) => {
 //#endregion Validação Inputs Vaga
 
 const validarLogin = () => {
-        
+
     const email = document.getElementById('email-input-login');
     const senha = document.getElementById('password-input-login');
     const erro = document.getElementById('login-error');
@@ -356,7 +362,7 @@ const validarLogin = () => {
         else {
             limparCampos(email, senha);
             erro.classList.add('d-none');
-            
+
             permissoesUsuario(usuarioLogado.tipo);
             buscarVagas();
         }
@@ -440,12 +446,12 @@ const cadastrarVaga = event => {
     limparCampos(titulo, descricao, remuneracao);
 }
 
-const buscarVagas = async () => {  
+const buscarVagas = async () => {
     irPara('login', 'list-jobs');
 
     const ul = document.getElementById('ul-vagas');
-    if(ul!== null) ul.remove();
-    
+    if (ul !== null) ul.remove();
+
     await axios.get(VAGAS_URL).then(resolve => {
         const div = document.getElementById('div-vagas');
         const ul = document.createElement('ul');
@@ -455,7 +461,7 @@ const buscarVagas = async () => {
         resolve.data.forEach(e => {
             const li = document.createElement('li');
             adicionarAtributos(li, `li-vaga-${e.id}`, CLASS_LI_VAGA);
-            li.addEventListener('click', detalharVaga); 
+            li.addEventListener('click', detalharVaga);
             const spanTitulo = document.createElement('span');
             spanTitulo.setAttribute('id', `span-titulo-${e.id}`)
             // spanTitulo.addEventListener('click', detalharVaga);
@@ -465,7 +471,7 @@ const buscarVagas = async () => {
             // spanRemuneracao.addEventListener('click', detalharVaga);
             spanRemuneracao.textContent = `Remuneração: ${e.remuneracao}`;
             ul.appendChild(li);
-            li.append(spanTitulo, spanRemuneracao);         
+            li.append(spanTitulo, spanRemuneracao);
         });
     }, reject => {
         console.log(`Ocorreu alguma erro a busca das vagas. (${reject})`);
@@ -478,9 +484,9 @@ const detalharVaga = async event => {
     const idElemento = idSplit[idSplit.length - 1];
 
     const div = document.getElementById('jobs-content-position');
-    while(div.firstChild) div.removeChild(div.firstChild);
+    while (div.firstChild) div.removeChild(div.firstChild);
 
-    await axios.get(`${VAGAS_URL}/${idElemento}`).then(resolve => {       
+    await axios.get(`${VAGAS_URL}/${idElemento}`).then(resolve => {
         const divVaga = document.createElement('div');
         adicionarAtributos(divVaga, `jobs-content-details-${resolve.data.id}`, CLASS_DIV_VAGA);
         div.appendChild(divVaga);
@@ -517,9 +523,9 @@ const excluirVaga = async () => {
     }
 }
 
-const candidatarVaga = () => {   
-    let candidatura =  new Candidatura(vagaSelecionada.id, usuarioLogado.id);
-   
+const candidatarVaga = () => {
+    let candidatura = new Candidatura(vagaSelecionada.id, usuarioLogado.id);
+
     usuarioLogado.candidaturas.push(candidatura);
     vagaSelecionada.candidatos.push(candidatura);
 
@@ -538,12 +544,13 @@ const candidatarVaga = () => {
     alert(`Candidatura realizada com sucesso!`);
 
     trocarFuncionalidadeBotoes();
+    buscarCandidatos(vagaSelecionada.id);
 }
 
 const removerCandidatura = () => {
     usuarioLogado.candidaturas = usuarioLogado.candidaturas.filter(e => e.idVaga !== vagaSelecionada.id);
     vagaSelecionada.candidatos = vagaSelecionada.candidatos.filter(e => e.idCandidato !== usuarioLogado.id);
-  
+
     axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
         // console.log(resolve.data);
     }, reject => {
@@ -557,27 +564,54 @@ const removerCandidatura = () => {
     });
     alert(`Candidatura cancelada com sucesso!`);
     // irPara('jobs-details', 'list-jobs');
+    buscarCandidatos(vagaSelecionada.id);
     trocarFuncionalidadeBotoes();
 }
 
 const buscarCandidatos = async id => {
+    const div = document.getElementById('div-candidates');
+    if (div !== null) div.remove();
+
     await axios.get(USUARIOS_URL).then(resolve => {
         let candidatos = [];
 
         resolve.data.forEach(usuario => {
             let tmp = usuario.candidaturas.find(vaga => vaga.idVaga === id);
-            if(tmp !== undefined)
+            if (tmp !== undefined)
                 candidatos.push(usuario);
         })
 
-        console.log(candidatos);
+        const divPosicao = document.getElementById('candidates-position');
+        const divCandidatos = document.createElement('div');
+        adicionarAtributos(divCandidatos, 'div-candidates', CLASS_DIV_CANDIDATOS);
+        divPosicao.appendChild(divCandidatos);
 
+        candidatos.forEach(candidato => {
+            const divCandidato = document.createElement('div');
+            adicionarAtributos(divCandidato, `div-candidate-${candidato.id}`, CLASS_DIV_CANDIDATO);
 
+            const divNome = document.createElement('div');
+            const divData = document.createElement('div');
+            const divBtn = document.createElement('div');
+            const btnReprovar = document.createElement('button');
+
+            adicionarAtributos(divNome, `div-name-${candidato.id}`, ['col', 'text-start']);
+            adicionarAtributos(divData, `div-data-${candidato.id}`, ['col']);
+            adicionarAtributos(divBtn, `div-btn-${candidato.id}`, ['col', 'text-end', 'btn-fail']);
+            adicionarAtributos(btnReprovar, `btn-reprove-${candidato.id}`, ['btn', 'btn-danger']);
+
+            divNome.textContent = `${candidato.nome}`;
+            divData.textContent = `${candidato.dataNascimento}`;
+            btnReprovar.textContent = 'Reprovar';
+
+            divBtn.appendChild(btnReprovar);
+            divCandidato.append(divNome, divData, divBtn);
+            divCandidatos.appendChild(divCandidato);
+        })
     }, reject => {
         console.log(`Ocorreu algum erro ao buscar candidatos a vaga. (${reject})`);
     });
 }
-
 
 const trocarFuncionalidadeBotoes = () => {
     const divBtns = document.getElementById('jobs-details-btns');
@@ -585,10 +619,10 @@ const trocarFuncionalidadeBotoes = () => {
     const btnCandidatar = document.createElement('button');
     adicionarAtributos(btnCandidatar, 'btn-apply-job', ['btn', 'btn-dark']);
     divBtns.appendChild(btnCandidatar);
-    if(vagaSelecionada.candidatos.some(e => e.idCandidato === usuarioLogado.id)) {
+    if (vagaSelecionada.candidatos.some(e => e.idCandidato === usuarioLogado.id)) {
         btnCandidatar.textContent = 'Cancelar Candidatura';
         btnCandidatar.addEventListener('click', removerCandidatura);
-    } else if(usuarioLogado.tipo == '1') {
+    } else if (usuarioLogado.tipo == '1') {
         btnCandidatar.textContent = 'Candidatar-se';
         btnCandidatar.addEventListener('click', candidatarVaga);
     } else {
