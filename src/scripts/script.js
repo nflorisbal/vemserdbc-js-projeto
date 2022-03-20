@@ -1,3 +1,4 @@
+
 // constantes globais
 const USUARIOS_URL = 'http://localhost:3000/usuarios';
 const VAGAS_URL = 'http://localhost:3000/vagas';
@@ -6,7 +7,8 @@ const CLASS_DIV_VAGA = ['w-100', 'p-3', 'd-flex', 'flex-column', 'border', 'bord
 
 // variáveis globais
 let permissaoUsuario;
-let vagaGlobal;
+let vagaSelecionada;
+let usuarioLogado;
 
 class Usuario {
     id;
@@ -119,6 +121,7 @@ const primeiraLetra = string => {
 const permissoesUsuario = permissao => {
     const botoesCadastroVagas = document.getElementById('job-btns');
     const botaoSairCadastroVagas = document.getElementById('exit-btn');
+    // const botaoExcluirVaga = document.getElementById('btn-remove-job');
 
     switch (permissao) {
         case '1':
@@ -126,12 +129,14 @@ const permissoesUsuario = permissao => {
             botoesCadastroVagas.classList.remove('justify-content-between');
             botoesCadastroVagas.classList.add('justify-content-center');
             document.getElementById('add-job-btn').classList.add('d-none');
+            document.getElementById('btn-remove-job').classList.add('d-none');
             break;
         case '2':
             botaoSairCadastroVagas.classList.remove('btn-dark');
             botoesCadastroVagas.classList.add('justify-content-between');
             botoesCadastroVagas.classList.remove('justify-content-center');
             document.getElementById('add-job-btn').classList.remove('d-none');
+            document.getElementById('btn-remove-job').classList.remove('d-none');
             break;
     }
 }
@@ -345,14 +350,15 @@ const validarLogin = () => {
     const erro = document.getElementById('login-error');
 
     axios.get(USUARIOS_URL).then(resolve => {
-        let usuario = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
+        usuarioLogado = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
 
-        if (usuario === undefined)
+        if (usuarioLogado === undefined)
             erro.classList.remove('d-none');
         else {
             limparCampos(email, senha);
             erro.classList.add('d-none');
-            permissoesUsuario(usuario.tipo);
+            
+            permissoesUsuario(usuarioLogado.tipo);
             buscarVagas();
         }
     }, reject => {
@@ -412,8 +418,6 @@ const cadastrarVaga = event => {
 
     axios.post(VAGAS_URL, vaga)
         .then((resolve) => {
-            console.log(resolve.data);
-
             const ul = document.getElementById('ul-vagas');
             const li = document.createElement('li');
 
@@ -488,22 +492,41 @@ const detalharVaga = async event => {
         pRemuneracao.textContent = `Remuneração: ${resolve.data.remuneracao}`;
         divVaga.append(pTitulo, pDescricao, pRemuneracao);
         
-        vagaGlobal = resolve.data;
+        vagaSelecionada = resolve.data;
     }, reject => {
         console.log(`Ocorreu algum erro ao detalhar a vaga. (${reject})`);
     });
 }
 
 const excluirVaga = async () => {
-    if (confirm(`Deseja remover a vaga ${vagaGlobal.titulo}?`)) {
-        await axios.delete(`${VAGAS_URL}/${vagaGlobal.id}`).then(resolve => {
-            console.log(resolve);
-            debugger;
-            const li = document.getElementById(`li-vaga-${vagaGlobal.id}`);
+    if (confirm(`Deseja remover a vaga ${vagaSelecionada.titulo}?`)) {
+        await axios.delete(`${VAGAS_URL}/${vagaSelecionada.id}`).then(resolve => {
+            const li = document.getElementById(`li-vaga-${vagaSelecionada.id}`);
             li.remove();
             irPara('jobs-details', 'list-jobs');
         }, reject => {
             console.log(`Ocorreu algum erro ao excluir a vaga. (${reject})`);
         });
     }
+}
+
+const candidatarVaga = () => {
+    let candidatura =  new Candidatura(vagaSelecionada.id, usuarioLogado.id);
+   
+    usuarioLogado.candidaturas.push(candidatura);
+    vagaSelecionada.candidatos.push(candidatura);
+
+    axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
+        console.log(resolve.data);
+    }, reject => {
+        console.log(`Ocorreu algum erro ao candidatar-se a vaga. (${reject})`);
+    });
+
+    axios.put(`${VAGAS_URL}/${vagaSelecionada.id}`, vagaSelecionada).then(resolve => {
+        console.log(resolve.data);
+    }, reject => {
+        console.log(`Ocorreu algum erro ao candidatar-se a vaga. (${reject})`);
+    });
+
+    alert(`Candidatura realizada com sucesso!`);
 }
