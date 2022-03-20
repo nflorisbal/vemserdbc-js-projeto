@@ -446,7 +446,7 @@ const buscarVagas = async () => {
 
     const ul = document.getElementById('ul-vagas');
     if(ul!== null) ul.remove();
-
+    
     await axios.get(VAGAS_URL).then(resolve => {
         const div = document.getElementById('div-vagas');
         const ul = document.createElement('ul');
@@ -491,8 +491,9 @@ const detalharVaga = async event => {
         pDescricao.textContent = `Descrição: ${resolve.data.descricao}`;
         pRemuneracao.textContent = `Remuneração: ${resolve.data.remuneracao}`;
         divVaga.append(pTitulo, pDescricao, pRemuneracao);
-        
+
         vagaSelecionada = resolve.data;
+        trocarFuncionalidadeBotoes();
     }, reject => {
         console.log(`Ocorreu algum erro ao detalhar a vaga. (${reject})`);
     });
@@ -510,7 +511,7 @@ const excluirVaga = async () => {
     }
 }
 
-const candidatarVaga = () => {
+const candidatarVaga = () => {   
     let candidatura =  new Candidatura(vagaSelecionada.id, usuarioLogado.id);
    
     usuarioLogado.candidaturas.push(candidatura);
@@ -525,8 +526,51 @@ const candidatarVaga = () => {
     axios.put(`${VAGAS_URL}/${vagaSelecionada.id}`, vagaSelecionada).then(resolve => {
         console.log(resolve.data);
     }, reject => {
-        console.log(`Ocorreu algum erro ao candidatar-se a vaga. (${reject})`);
+        console.log(`Ocorreu algum erro ao registrar o candidato a vaga. (${reject})`);
     });
 
     alert(`Candidatura realizada com sucesso!`);
+
+    // trocarFuncionalidadeBotoes();
+}
+
+const removerCandidatura = () => {
+    // debugger;
+
+
+
+    usuarioLogado.candidaturas = usuarioLogado.candidaturas.filter(e => e.idVaga !== vagaSelecionada);
+    vagaSelecionada.candidatos = vagaSelecionada.candidatos.filter(e => e.idCandidato !== usuarioLogado);
+    console.log(usuarioLogado.candidaturas);
+    console.log(vagaSelecionada.candidatos);
+  
+    axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
+        console.log(resolve.data);
+    }, reject => {
+        console.log(`Ocorreu algum erro ao remover a candidatura. (${reject})`);
+    });
+
+    axios.put(`${VAGAS_URL}/${vagaSelecionada.id}`, vagaSelecionada).then(resolve => {
+        console.log(resolve.data);
+    }, reject => {
+        console.log(`Ocorreu algum erro ao remover o candidato a vaga. (${reject})`);
+    });
+
+    alert(`Candidatura cancelada com sucesso!`);
+    console.log('remover candidatura');
+}
+
+const trocarFuncionalidadeBotoes = () => {
+    const divBtns = document.getElementById('jobs-details-btns');
+    divBtns.removeChild(divBtns.lastChild);
+    const btnCandidatar = document.createElement('button');
+    adicionarAtributos(btnCandidatar, 'btn-apply-job', ['btn', 'btn-dark']);
+    divBtns.appendChild(btnCandidatar);
+    if(vagaSelecionada.candidatos.some(e => e.idCandidato === usuarioLogado.id)) {
+        btnCandidatar.textContent = 'Cancelar Candidatura';
+        btnCandidatar.addEventListener('click', removerCandidatura);
+    } else {
+        btnCandidatar.textContent = 'Candidatar-se';
+        btnCandidatar.addEventListener('click', candidatarVaga);
+    }
 }
