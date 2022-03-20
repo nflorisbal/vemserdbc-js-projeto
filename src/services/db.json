@@ -1,13 +1,22 @@
 {
   "usuarios": [
     {
-      "tipo": "2",
+      "tipo": "1",
       "nome": "Nelson Santos Florisbal",
       "dataNascimento": "18/10/1985",
       "email": "a",
       "senha": "a",
       "candidaturas": [],
       "id": 1
+    },
+    {
+      "tipo": "2",
+      "nome": "César Luchesi",
+      "dataNascimento": "01/01/2000",
+      "email": "cesar@dbccompany.com.br",
+      "senha": "Abc@1234",
+      "candidaturas": [],
+      "id": 2
     }
   ],
   "vagas": [

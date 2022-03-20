@@ -118,8 +118,7 @@
                 <span>VAGAS</span>
             </div>
             <div id="div-vagas" class="w-75 p-3 d-flex flex-column">
-                <ul id="ul-vagas">
-                </ul>
+                
             </div>
             <div id="job-btns" class="w-75 p-3 d-flex justify-content-between">
                 <button class="btn border border-dark" type="button" id="exit-btn" onclick="irPara('list-jobs', 'login')">Sair</button>
@@ -132,7 +131,7 @@
                 <span>DETALHE DA VAGAS</span>
             </div>
             <div id="jobs-content-position" class="w-75">
-                <div id="jobs-content-details"></div>
+                <!-- <div id="jobs-content-details"></div> -->
             </div>
             <div class="w-100 h-100 text-center m-4">
                 <h4>Candidatos na Vaga</h4>
@@ -145,15 +144,12 @@
                 </div>
             </div>
             <div class="w-75 p-3 d-flex justify-content-between">
-                <button class="btn border border-dark" type="button" id="btn-back-job-details">Voltar</button>
+                <button class="btn border border-dark" type="button" id="btn-back-job-details" onclick="irPara('jobs-details', 'list-jobs')">Voltar</button>
                 <button class="btn btn-dark" type="button" id="btn-remove-job">Excluir Vaga</button>
             </div>
         </div>
 
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
     <script src="../node_modules/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" type="text/javascript"></script>
     <script src="../src/scripts/script.js"></script>
