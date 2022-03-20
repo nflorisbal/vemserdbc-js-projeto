@@ -531,18 +531,12 @@ const candidatarVaga = () => {
 
     alert(`Candidatura realizada com sucesso!`);
 
-    // trocarFuncionalidadeBotoes();
+    trocarFuncionalidadeBotoes();
 }
 
 const removerCandidatura = () => {
-    // debugger;
-
-
-
-    usuarioLogado.candidaturas = usuarioLogado.candidaturas.filter(e => e.idVaga !== vagaSelecionada);
-    vagaSelecionada.candidatos = vagaSelecionada.candidatos.filter(e => e.idCandidato !== usuarioLogado);
-    console.log(usuarioLogado.candidaturas);
-    console.log(vagaSelecionada.candidatos);
+    usuarioLogado.candidaturas = usuarioLogado.candidaturas.filter(e => e.idVaga !== vagaSelecionada.id);
+    vagaSelecionada.candidatos = vagaSelecionada.candidatos.filter(e => e.idCandidato !== usuarioLogado.id);
   
     axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
         console.log(resolve.data);
@@ -555,9 +549,9 @@ const removerCandidatura = () => {
     }, reject => {
         console.log(`Ocorreu algum erro ao remover o candidato a vaga. (${reject})`);
     });
-
     alert(`Candidatura cancelada com sucesso!`);
-    console.log('remover candidatura');
+    // irPara('jobs-details', 'list-jobs');
+    trocarFuncionalidadeBotoes();
 }
 
 const trocarFuncionalidadeBotoes = () => {

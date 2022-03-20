@@ -6,18 +6,7 @@
       "dataNascimento": "18/10/1985",
       "email": "a",
       "senha": "a",
-      "candidaturas": [
-        {
-          "idVaga": 2,
-          "idCandidato": 1,
-          "reprovado": false
-        },
-        {
-          "idVaga": 1,
-          "idCandidato": 1,
-          "reprovado": false
-        }
-      ],
+      "candidaturas": [],
       "id": 1
     },
     {
@@ -44,26 +33,14 @@
       "titulo": "Desenvolvedor Full-Stack",
       "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
       "remuneracao": "R$ 5.500,00",
-      "candidatos": [
-        {
-          "idVaga": 1,
-          "idCandidato": 1,
-          "reprovado": false
-        }
-      ],
+      "candidatos": [],
       "id": 1
     },
     {
       "titulo": "Analista de Testes",
       "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
       "remuneracao": "R$ 3.200,00",
-      "candidatos": [
-        {
-          "idVaga": 2,
-          "idCandidato": 1,
-          "reprovado": false
-        }
-      ],
+      "candidatos": [],
       "id": 2
     },
     {
