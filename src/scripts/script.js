@@ -1,10 +1,12 @@
-
+// constantes globais
 const USUARIOS_URL = 'http://localhost:3000/usuarios';
 const VAGAS_URL = 'http://localhost:3000/vagas';
 const CLASS_LI_VAGA = ['d-flex', 'justify-content-between', 'border', 'border-dark', 'rounded', 'p-3', 'w-100', 'mb-3'];
 const CLASS_DIV_VAGA = ['w-100', 'p-3', 'd-flex', 'flex-column', 'border', 'border-dark', 'rounded', 'mt-4', 'align-content-center'];
 
+// variáveis globais
 let permissaoUsuario;
+let vagaIdGlobal = 0;
 
 class Usuario {
     id;
@@ -463,7 +465,6 @@ const buscarVagas = async () => {
     });
 }
 
-
 const detalharVaga = async event => {
     irPara('list-jobs', 'jobs-details');
 
@@ -486,26 +487,21 @@ const detalharVaga = async event => {
         pTitulo.textContent = `Titulo: ${resolve.data.titulo}`;
         pDescricao.textContent = `Descrição: ${resolve.data.descricao}`;
         pRemuneracao.textContent = `Remuneração: ${resolve.data.remuneracao}`;
-
         divVaga.append(pTitulo, pDescricao, pRemuneracao);
-
-        const btnExcluirVaga = document.getElementById('btn-remove-job');
-        btnExcluirVaga.addEventListener('click', excluirVaga(resolve.data));
+        vagaIdGlobal = resolve.data.id;
     }, reject => {
-        console.log(`Ocorreu alguma erro ao detalhar a vaga. (${reject})`);
-    })  
+        console.log(`Ocorreu algum erro ao detalhar a vaga. (${reject})`);
+    });
 }
 
-const excluirVaga = async vaga => {
-    if (confirm(`Deseja remover a vaga ${vaga.titulo}?`)) {
-        try {
-            const resolve = await axios.delete(`${VAGAS_URL}/${vaga.id}`);
-            console.log(resolve);
-            const li = document.getElementById(`li-vaga-${vaga.id}`);
+const excluirVaga = async () => {
+    await axios.get(`${VAGAS_URL}/${vagaIdGlobal}`).then(resolve => {
+        if (confirm(`Deseja remover a vaga ${resolve.data.titulo}?`)) {
+            const li = document.getElementById(`li-vaga-${resolve.data.id}`);
             li.remove();
             irPara('jobs-details', 'list-jobs');
-        } catch (erro) {
-            console.log(`Ocorreu alguma erro ao excluir a vaga. (${erro})`);
         }
-    }
+    }, reject => {
+        console.log(`Ocorreu algum erro ao excluir a vaga. (${reject})`);
+    });
 }
