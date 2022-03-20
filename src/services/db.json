@@ -6,15 +6,21 @@
       "dataNascimento": "18/10/1985",
       "email": "a",
       "senha": "a",
-      "candidaturas": [],
+      "candidaturas": [
+        {
+          "idVaga": 1,
+          "idCandidato": 1,
+          "reprovado": false
+        }
+      ],
       "id": 1
     },
     {
       "tipo": "2",
       "nome": "César Luchesi",
       "dataNascimento": "01/01/2000",
-      "email": "cesar@dbccompany.com.br",
-      "senha": "Abc@1234",
+      "email": "b",
+      "senha": "b",
       "candidaturas": [],
       "id": 2
     },
@@ -26,6 +32,21 @@
       "senha": "Abc@1234",
       "candidaturas": [],
       "id": 3
+    },
+    {
+      "tipo": "1",
+      "nome": "Gabrielzinho Do ForEach",
+      "dataNascimento": "01/01/2000",
+      "email": "foreach@foreach.com",
+      "senha": "Abc@1234",
+      "candidaturas": [
+        {
+          "idVaga": 1,
+          "idCandidato": 4,
+          "reprovado": false
+        }
+      ],
+      "id": 4
     }
   ],
   "vagas": [
@@ -33,7 +54,18 @@
       "titulo": "Desenvolvedor Full-Stack",
       "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
       "remuneracao": "R$ 5.500,00",
-      "candidatos": [],
+      "candidatos": [
+        {
+          "idVaga": 1,
+          "idCandidato": 1,
+          "reprovado": false
+        },
+        {
+          "idVaga": 1,
+          "idCandidato": 4,
+          "reprovado": false
+        }
+      ],
       "id": 1
     },
     {

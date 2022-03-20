@@ -473,8 +473,6 @@ const buscarVagas = async () => {
 }
 
 const detalharVaga = async event => {
-    irPara('list-jobs', 'jobs-details');
-
     const id = event.target.id;
     const idSplit = id.split('-');
     const idElemento = idSplit[idSplit.length - 1];
@@ -496,10 +494,15 @@ const detalharVaga = async event => {
         divVaga.append(pTitulo, pDescricao, pRemuneracao);
 
         vagaSelecionada = resolve.data;
+
+        buscarCandidatos(vagaSelecionada.id);
+
         trocarFuncionalidadeBotoes();
     }, reject => {
         console.log(`Ocorreu algum erro ao detalhar a vaga. (${reject})`);
     });
+
+    irPara('list-jobs', 'jobs-details');
 }
 
 const excluirVaga = async () => {
@@ -520,17 +523,14 @@ const candidatarVaga = () => {
     usuarioLogado.candidaturas.push(candidatura);
     vagaSelecionada.candidatos.push(candidatura);
 
-    console.log(usuarioLogado);
-    console.log(vagaSelecionada);
-
     axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
-        console.log(resolve.data);
+        // console.log(resolve.data);
     }, reject => {
         console.log(`Ocorreu algum erro ao candidatar-se a vaga. (${reject})`);
     });
 
     axios.put(`${VAGAS_URL}/${vagaSelecionada.id}`, vagaSelecionada).then(resolve => {
-        console.log(resolve.data);
+        // console.log(resolve.data);
     }, reject => {
         console.log(`Ocorreu algum erro ao registrar o candidato a vaga. (${reject})`);
     });
@@ -545,13 +545,13 @@ const removerCandidatura = () => {
     vagaSelecionada.candidatos = vagaSelecionada.candidatos.filter(e => e.idCandidato !== usuarioLogado.id);
   
     axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
-        console.log(resolve.data);
+        // console.log(resolve.data);
     }, reject => {
         console.log(`Ocorreu algum erro ao remover a candidatura. (${reject})`);
     });
 
     axios.put(`${VAGAS_URL}/${vagaSelecionada.id}`, vagaSelecionada).then(resolve => {
-        console.log(resolve.data);
+        // console.log(resolve.data);
     }, reject => {
         console.log(`Ocorreu algum erro ao remover o candidato a vaga. (${reject})`);
     });
@@ -559,6 +559,25 @@ const removerCandidatura = () => {
     // irPara('jobs-details', 'list-jobs');
     trocarFuncionalidadeBotoes();
 }
+
+const buscarCandidatos = async id => {
+    await axios.get(USUARIOS_URL).then(resolve => {
+        let candidatos = [];
+
+        resolve.data.forEach(usuario => {
+            let tmp = usuario.candidaturas.find(vaga => vaga.idVaga === id);
+            if(tmp !== undefined)
+                candidatos.push(usuario);
+        })
+
+        console.log(candidatos);
+
+
+    }, reject => {
+        console.log(`Ocorreu algum erro ao buscar candidatos a vaga. (${reject})`);
+    });
+}
+
 
 const trocarFuncionalidadeBotoes = () => {
     const divBtns = document.getElementById('jobs-details-btns');
