@@ -105,7 +105,7 @@ const limparCampos = (...campos) => {
 }
 
 const voltarCadastro = () => {
-    document.getElementById('lista-tipo-usuario').value = '';
+    document.getElementById('lista-tipo-usuario').value = '1';
     document.getElementById('nome-input-registration').value = '';
     document.getElementById('date-input-registration').value = '';
     document.getElementById('email-input-registration').value = '';
@@ -132,8 +132,8 @@ const permissoesUsuario = permissao => {
 
     switch (permissao) {
         case '1':
-            for(componente of funcionalidadeReprovar) componente.classList.add('d-none');
-            for(componente of colunaDataCandidatos) componente.classList.add('text-end');
+            for (componente of funcionalidadeReprovar) componente.classList.add('d-none');
+            for (componente of colunaDataCandidatos) componente.classList.add('text-end');
             botaoSairCadastroVagas.classList.add('btn-dark');
             botoesCadastroVagas.classList.remove('justify-content-between');
             botoesCadastroVagas.classList.add('justify-content-center');
@@ -141,8 +141,8 @@ const permissoesUsuario = permissao => {
             document.getElementById('btn-remove-job').classList.add('d-none');
             break;
         case '2':
-            for(componente of funcionalidadeReprovar) componente.classList.remove('d-none');
-            for(componente of colunaDataCandidatos) componente.classList.remove('text-end');
+            for (componente of funcionalidadeReprovar) componente.classList.remove('d-none');
+            for (componente of colunaDataCandidatos) componente.classList.remove('text-end');
             botaoSairCadastroVagas.classList.remove('btn-dark');
             botoesCadastroVagas.classList.add('justify-content-between');
             botoesCadastroVagas.classList.remove('justify-content-center');
@@ -502,7 +502,7 @@ const detalharVaga = async event => {
 
         vagaSelecionada = resolve.data;
 
-        buscarCandidatos(vagaSelecionada.id);
+        buscarCandidatos();
 
         trocarFuncionalidadeBotoes();
     }, reject => {
@@ -526,7 +526,7 @@ const excluirVaga = async () => {
             resolve.data.forEach(usuario => {
                 let candidaturasSemVagaExcluida = usuario.candidaturas.filter(vaga => vaga.idVaga !== vagaSelecionada.id);
                 usuario.candidaturas = candidaturasSemVagaExcluida;
-                         
+
                 axios.put(`${USUARIOS_URL}/${usuario.id}`, usuario).then(resolve => {
                     // console.log(resolve.data);
                 }, reject => {
@@ -580,27 +580,29 @@ const removerCandidatura = () => {
     });
 
     alert(`Candidatura cancelada com sucesso!`);
-    
+
     buscarCandidatos(vagaSelecionada.id);
     trocarFuncionalidadeBotoes();
 }
 
 const reprovarCandidato = async (candidato, vaga) => {
     candidato.candidaturas.map(candidatura => {
-        if(candidatura.idVaga === vaga.id) candidatura.reprovado = true;
+        if (candidatura.idVaga === vaga.id) candidatura.reprovado = true;
     });
 
-    await axios.put(`${USUARIOS_URL}/${candidato.id}`, candidato).then(resolve => {
+    try {
+        const resolve = await axios.put(`${USUARIOS_URL}/${candidato.id}`, candidato);
+
         const btnReprovar = document.getElementById(`btn-reprove-${candidato.id}`);
         btnReprovar.disabled = true;
         btnReprovar.classList.add('btn-secondary');
         btnReprovar.classList.remove('btn-danger');
-    }, reject => {
+    } catch (reject) {
         console.log(`Ocorreu algum erro ao atualiza vaga removida das candidaturas. (${reject})`);
-    });
+    }
 }
 
-const buscarCandidatos = async id => {
+const buscarCandidatos = async () => {
     const div = document.getElementById('div-candidates');
     if (div !== null) div.remove();
 
@@ -608,11 +610,11 @@ const buscarCandidatos = async id => {
         let candidatos = [];
 
         resolve.data.forEach(usuario => {
-            let candidatosDaVaga = usuario.candidaturas.find(vaga => vaga.idVaga === id);
+            let candidatosDaVaga = usuario.candidaturas.find(vaga => vaga.idVaga === vagaSelecionada.id);
             if (candidatosDaVaga !== undefined)
                 candidatos.push(usuario);
         })
-        
+
         const divPosicao = document.getElementById('candidates-position');
         const divCandidatos = document.createElement('div');
         adicionarAtributos(divCandidatos, 'div-candidates', CLASS_DIV_CANDIDATOS);
@@ -632,12 +634,12 @@ const buscarCandidatos = async id => {
             adicionarAtributos(divBtn, `div-btn-${candidato.id}`, ['col', 'text-end', 'btn-fail']);
             adicionarAtributos(btnReprovar, `btn-reprove-${candidato.id}`, ['btn', 'btn-danger']);
 
-            if (candidato.candidaturas.some(candidatura => 
-                candidatura.reprovado && candidatura.idVaga === id)) {
-                    btnReprovar.disabled = true;
-                    btnReprovar.classList.add('btn-secondary');
-                    btnReprovar.classList.remove('btn-danger');
-                }
+            if (candidato.candidaturas.some(candidatura =>
+                candidatura.reprovado && candidatura.idVaga === vagaSelecionada.id)) {
+                btnReprovar.disabled = true;
+                btnReprovar.classList.add('btn-secondary');
+                btnReprovar.classList.remove('btn-danger');
+            }
 
             btnReprovar.addEventListener('click', () => reprovarCandidato(candidato, vagaSelecionada));
 
@@ -656,13 +658,32 @@ const buscarCandidatos = async id => {
     permissoesUsuario(usuarioLogado.tipo);
 }
 
-const trocarFuncionalidadeBotoes = () => {
+const trocarFuncionalidadeBotoes = async () => {
     const divBtns = document.getElementById('jobs-details-btns');
     divBtns.removeChild(divBtns.lastChild);
+
     const btnCandidatar = document.createElement('button');
     adicionarAtributos(btnCandidatar, 'btn-apply-job', ['btn', 'btn-dark']);
     divBtns.appendChild(btnCandidatar);
-    if (vagaSelecionada.candidatos.some(e => e.idCandidato === usuarioLogado.id)) {
+
+    try {
+        const resolve = await axios.get(USUARIOS_URL);
+
+        // debugger;
+
+        resolve.data.forEach(candidato => {
+            if (candidato.candidaturas.some(candidatura =>
+                candidatura.reprovado && candidatura.idVaga === vagaSelecionada.id)) {
+                btnCandidatar.disabled = true;
+                btnCandidatar.classList.add('btn-secondary');
+                btnCandidatar.classList.remove('btn-dark');
+            }
+        })
+    } catch (reject) {
+        console.log(`Ocorreu algum erro ao buscar candidatos a vaga. (${reject})`);
+    }
+
+    if (vagaSelecionada.candidatos.some(candidato => candidato.idCandidato === usuarioLogado.id)) {
         btnCandidatar.textContent = 'Cancelar Candidatura';
         btnCandidatar.addEventListener('click', removerCandidatura);
     } else if (usuarioLogado.tipo == '1') {
@@ -671,4 +692,5 @@ const trocarFuncionalidadeBotoes = () => {
     } else {
         btnCandidatar.classList.add('d-none');
     }
+
 }

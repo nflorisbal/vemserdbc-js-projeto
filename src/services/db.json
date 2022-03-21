@@ -8,7 +8,12 @@
       "senha": "a",
       "candidaturas": [
         {
-          "idVaga": 1,
+          "idVaga": 3,
+          "idCandidato": 1,
+          "reprovado": false
+        },
+        {
+          "idVaga": 4,
           "idCandidato": 1,
           "reprovado": false
         },
@@ -18,14 +23,9 @@
           "reprovado": false
         },
         {
-          "idVaga": 3,
+          "idVaga": 1,
           "idCandidato": 1,
-          "reprovado": false
-        },
-        {
-          "idVaga": 4,
-          "idCandidato": 1,
-          "reprovado": false
+          "reprovado": true
         }
       ],
       "id": 1
