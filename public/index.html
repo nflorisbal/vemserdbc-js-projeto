@@ -80,7 +80,7 @@
             </div>
 
             <div class="w-75 d-flex justify-content-between mt-4">
-                <button class="w-25 btn btn-ligth border border-dark" type="button" onclick="voltarCadastro()">Voltar</button>
+                <button class="w-25 btn btn-ligth border border-dark, buttoncor" type="button" onclick="voltarCadastro()">Voltar</button>
                 <button class="w-25 btn btn-dark" type="button" onclick="validarCadastroUsuario(event)">Cadastrar</button>
             </div>
         </div>
@@ -104,11 +104,11 @@
 
             <div class="w-75 p-3 d-flex flex-column">
                 <span>Remuneração*</span>
-                <input id="remuneration-input-registration" onkeyup="validarRemuneracao()">
+                <input id="remuneration-input-registration" onkeyup="validarRemuneracao()" maxlength="13">
                 <span id="remuneration-registration-error" class="d-none">Remuneração inválida</span>
             </div>
             <div class="w-75 d-flex justify-content-between mt-4">
-                <button class="btn btn-ligth border border-dark" type="button" onclick="irPara('jobs-registration', 'list-jobs')">Voltar</button>
+                <button class="btn btn-ligth border border-dark, buttoncor " type="button" onclick="irPara('jobs-registration', 'list-jobs')">Voltar</button>
                 <button class="btn btn-dark" type="button" onclick="validarCadastroVaga(event)">Cadastrar</button>
             </div>
         </div>
@@ -121,7 +121,7 @@
                 
             </div>
             <div id="job-btns" class="w-75 p-3 d-flex justify-content-between">
-                <button class="btn border border-dark" type="button" id="exit-btn" onclick="irPara('list-jobs', 'login')">Sair</button>
+                <button class="btn border border-dark, buttoncor" type="button" id="exit-btn" onclick="irPara('list-jobs', 'login')">Sair</button>
                 <button class="btn btn-dark" type="button" id="add-job-btn" onclick="irPara('list-jobs', 'jobs-registration')">Cadastrar Vaga</button>
             </div>
         </div>
@@ -146,7 +146,7 @@
             <div id="candidates-position" class="d-flex flex-column w-100 align-items-center">
             </div>
             <div id="jobs-details-btns" class="w-75 p-3 d-flex justify-content-between">
-                <button class="btn border border-dark" type="button" id="btn-back-job-details" onclick="irPara('jobs-details', 'list-jobs')">Voltar</button>
+                <button class="btn border border-dark, buttoncor" type="button" id="btn-back-job-details" onclick="irPara('jobs-details', 'list-jobs')">Voltar</button>
                 <button class="btn btn-dark" type="button" id="btn-remove-job" onclick="excluirVaga()">Excluir Vaga</button>
             </div>
         </div>
