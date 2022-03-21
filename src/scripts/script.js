@@ -669,7 +669,7 @@ const trocarFuncionalidadeBotoes = () => {
     let naoPodeCandidatar = usuarioLogado.candidaturas.find(candidatura => candidatura.idVaga === vagaSelecionada.id) 
     
     if(naoPodeCandidatar !== undefined)
-        if(naoPodeCandidatar.reprovado && undefined) {
+        if(naoPodeCandidatar.reprovado) {
             btnCandidatar.disabled = true;
             btnCandidatar.classList.add('btn-secondary');
             btnCandidatar.classList.remove('btn-dark');

@@ -1,37 +1,12 @@
 {
   "usuarios": [
     {
-      "tipo": "1",
-      "nome": "Nelson Santos Florisbal",
+      "tipo": "2",
+      "nome": "Nelson Florisbal",
       "dataNascimento": "18/10/1985",
-      "email": "a",
-      "senha": "a",
+      "email": "nelson@email.com",
+      "senha": "Abc@1234",
       "candidaturas": [
-        {
-          "idVaga": 3,
-          "idCandidato": 1,
-          "reprovado": true
-        },
-        {
-          "idVaga": 1,
-          "idCandidato": 1,
-          "reprovado": true
-        },
-        {
-          "idVaga": 5,
-          "idCandidato": 1,
-          "reprovado": false
-        },
-        {
-          "idVaga": 4,
-          "idCandidato": 1,
-          "reprovado": false
-        },
-        {
-          "idVaga": 2,
-          "idCandidato": 1,
-          "reprovado": false
-        }
       ],
       "id": 1
     },
@@ -39,7 +14,7 @@
       "tipo": "2",
       "nome": "César Luchesi",
       "dataNascimento": "01/01/2000",
-      "email": "cesar@cesar.com",
+      "email": "cesar@email.com",
       "senha": "Abc@1234",
       "candidaturas": [],
       "id": 2
@@ -48,15 +23,9 @@
       "tipo": "1",
       "nome": "Joãozinho Full Stack",
       "dataNascimento": "01/01/1900",
-      "email": "c",
-      "senha": "c",
-      "candidaturas": [
-        {
-          "idVaga": 1,
-          "idCandidato": 3,
-          "reprovado": false
-        }
-      ],
+      "email": "joao@email.com",
+      "senha": "Abc@1234",
+      "candidaturas": [],
       "id": 3
     },
     {
@@ -70,6 +39,11 @@
           "idVaga": 1,
           "idCandidato": 4,
           "reprovado": false
+        },
+        {
+          "idVaga": 3,
+          "idCandidato": 4,
+          "reprovado": true
         }
       ],
       "id": 4
@@ -77,10 +51,21 @@
     {
       "tipo": "1",
       "nome": "Tiaguinho Beatbox",
-      "dataNascimento": "12/12/1998",
-      "email": "tiago@dbcompany.com.br",
+      "dataNascimento": "01/01/1998",
+      "email": "tiago@email.com",
       "senha": "Abc@1234",
-      "candidaturas": [],
+      "candidaturas": [
+        {
+          "idVaga": 1,
+          "idCandidato": 5,
+          "reprovado": false
+        },
+        {
+          "idVaga": 2,
+          "idCandidato": 5,
+          "reprovado": false
+        }
+      ],
       "id": 5
     }
   ],
@@ -92,17 +77,17 @@
       "candidatos": [
         {
           "idVaga": 1,
-          "idCandidato": 4,
-          "reprovado": false
-        },
-        {
-          "idVaga": 1,
           "idCandidato": 1,
           "reprovado": false
         },
         {
           "idVaga": 1,
-          "idCandidato": 3,
+          "idCandidato": 4,
+          "reprovado": false
+        },
+        {
+          "idVaga": 1,
+          "idCandidato": 5,
           "reprovado": false
         }
       ],
@@ -117,6 +102,11 @@
           "idVaga": 2,
           "idCandidato": 1,
           "reprovado": false
+        },
+        {
+          "idVaga": 2,
+          "idCandidato": 5,
+          "reprovado": false
         }
       ],
       "id": 2
@@ -126,6 +116,11 @@
       "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
       "remuneracao": "R$ 9.000,00",
       "candidatos": [
+        {
+          "idVaga": 3,
+          "idCandidato": 4,
+          "reprovado": false
+        },
         {
           "idVaga": 3,
           "idCandidato": 1,
@@ -146,19 +141,6 @@
         }
       ],
       "id": 4
-    },
-    {
-      "titulo": "Project Manager",
-      "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
-      "remuneracao": "R$ 4.500,00",
-      "candidatos": [
-        {
-          "idVaga": 5,
-          "idCandidato": 1,
-          "reprovado": false
-        }
-      ],
-      "id": 5
     }
   ]
 }
