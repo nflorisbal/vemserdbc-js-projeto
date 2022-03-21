@@ -6,141 +6,38 @@
       "dataNascimento": "18/10/1985",
       "email": "nelson@email.com",
       "senha": "Abc@1234",
-      "candidaturas": [
-      ],
+      "candidaturas": [],
       "id": 1
-    },
-    {
-      "tipo": "2",
-      "nome": "César Luchesi",
-      "dataNascimento": "01/01/2000",
-      "email": "cesar@email.com",
-      "senha": "Abc@1234",
-      "candidaturas": [],
-      "id": 2
-    },
-    {
-      "tipo": "1",
-      "nome": "Joãozinho Full Stack",
-      "dataNascimento": "01/01/1900",
-      "email": "joao@email.com",
-      "senha": "Abc@1234",
-      "candidaturas": [],
-      "id": 3
-    },
-    {
-      "tipo": "1",
-      "nome": "Gabrielzinho Do ForEach",
-      "dataNascimento": "01/01/2000",
-      "email": "foreach@foreach.com",
-      "senha": "Abc@1234",
-      "candidaturas": [
-        {
-          "idVaga": 1,
-          "idCandidato": 4,
-          "reprovado": false
-        },
-        {
-          "idVaga": 3,
-          "idCandidato": 4,
-          "reprovado": true
-        }
-      ],
-      "id": 4
     },
     {
       "tipo": "1",
       "nome": "Tiaguinho Beatbox",
-      "dataNascimento": "01/01/1998",
+      "dataNascimento": "01/01/2000",
       "email": "tiago@email.com",
       "senha": "Abc@1234",
       "candidaturas": [
         {
           "idVaga": 1,
-          "idCandidato": 5,
-          "reprovado": false
-        },
-        {
-          "idVaga": 2,
-          "idCandidato": 5,
-          "reprovado": false
+          "idCandidato": 2,
+          "reprovado": true
         }
       ],
-      "id": 5
+      "id": 2
     }
   ],
   "vagas": [
     {
       "titulo": "Desenvolvedor Full-Stack",
       "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
-      "remuneracao": "R$ 5.500,00",
+      "remuneracao": "R$ 5500",
       "candidatos": [
         {
           "idVaga": 1,
-          "idCandidato": 1,
-          "reprovado": false
-        },
-        {
-          "idVaga": 1,
-          "idCandidato": 4,
-          "reprovado": false
-        },
-        {
-          "idVaga": 1,
-          "idCandidato": 5,
+          "idCandidato": 2,
           "reprovado": false
         }
       ],
       "id": 1
-    },
-    {
-      "titulo": "Analista de Testes",
-      "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
-      "remuneracao": "R$ 3.200,00",
-      "candidatos": [
-        {
-          "idVaga": 2,
-          "idCandidato": 1,
-          "reprovado": false
-        },
-        {
-          "idVaga": 2,
-          "idCandidato": 5,
-          "reprovado": false
-        }
-      ],
-      "id": 2
-    },
-    {
-      "titulo": "Desenvolvedor Java Senior",
-      "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
-      "remuneracao": "R$ 9.000,00",
-      "candidatos": [
-        {
-          "idVaga": 3,
-          "idCandidato": 4,
-          "reprovado": false
-        },
-        {
-          "idVaga": 3,
-          "idCandidato": 1,
-          "reprovado": false
-        }
-      ],
-      "id": 3
-    },
-    {
-      "titulo": "Analista de Sistemas",
-      "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
-      "remuneracao": "R$ 3.000,00",
-      "candidatos": [
-        {
-          "idVaga": 4,
-          "idCandidato": 1,
-          "reprovado": false
-        }
-      ],
-      "id": 4
     }
   ]
 }
