@@ -78,7 +78,7 @@ const irPara = (origem, destino) => {
     alternarClasses(elementoDestino, 'd-none', 'd-flex');
 }
 
-const esqueceuSenha = async () => {
+const recuperarSenha = async () => {
     const email = prompt('Digite o e-mail para recuperar a senha:');
 
     if (email === null) return;
@@ -564,11 +564,8 @@ const candidatarVaga = () => {
 }
 
 const removerCandidatura = () => {
-
     usuarioLogado.candidaturas = usuarioLogado.candidaturas.filter(e => e.idVaga !== vagaSelecionada.id);
     vagaSelecionada.candidatos = vagaSelecionada.candidatos.filter(e => e.idCandidato !== usuarioLogado.id);
-
-    console.log(usuarioLogado.candidaturas);
 
     axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
         // console.log(resolve.data);
@@ -588,14 +585,16 @@ const removerCandidatura = () => {
     trocarFuncionalidadeBotoes();
 }
 
-const reprovarCandidato = (candidato, vaga) => {
+const reprovarCandidato = async (candidato, vaga) => {
     candidato.candidaturas.map(candidatura => {
         if(candidatura.idVaga === vaga.id) candidatura.reprovado = true;
     });
 
-    axios.put(`${USUARIOS_URL}/${candidato.id}`, candidato).then(resolve => {
+    await axios.put(`${USUARIOS_URL}/${candidato.id}`, candidato).then(resolve => {
         const btnReprovar = document.getElementById(`btn-reprove-${candidato.id}`);
         btnReprovar.disabled = true;
+        btnReprovar.classList.add('btn-secondary');
+        btnReprovar.classList.remove('btn-danger');
     }, reject => {
         console.log(`Ocorreu algum erro ao atualiza vaga removida das candidaturas. (${reject})`);
     });
@@ -609,11 +608,11 @@ const buscarCandidatos = async id => {
         let candidatos = [];
 
         resolve.data.forEach(usuario => {
-            let tmp = usuario.candidaturas.find(vaga => vaga.idVaga === id);
-            if (tmp !== undefined)
+            let candidatosDaVaga = usuario.candidaturas.find(vaga => vaga.idVaga === id);
+            if (candidatosDaVaga !== undefined)
                 candidatos.push(usuario);
         })
-
+        
         const divPosicao = document.getElementById('candidates-position');
         const divCandidatos = document.createElement('div');
         adicionarAtributos(divCandidatos, 'div-candidates', CLASS_DIV_CANDIDATOS);
@@ -632,6 +631,13 @@ const buscarCandidatos = async id => {
             adicionarAtributos(divData, `div-data-${candidato.id}`, ['col', 'text-data']);
             adicionarAtributos(divBtn, `div-btn-${candidato.id}`, ['col', 'text-end', 'btn-fail']);
             adicionarAtributos(btnReprovar, `btn-reprove-${candidato.id}`, ['btn', 'btn-danger']);
+
+            if (candidato.candidaturas.some(candidatura => 
+                candidatura.reprovado && candidatura.idVaga === id)) {
+                    btnReprovar.disabled = true;
+                    btnReprovar.classList.add('btn-secondary');
+                    btnReprovar.classList.remove('btn-danger');
+                }
 
             btnReprovar.addEventListener('click', () => reprovarCandidato(candidato, vagaSelecionada));
 

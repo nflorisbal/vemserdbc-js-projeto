@@ -10,7 +10,7 @@
         {
           "idVaga": 1,
           "idCandidato": 1,
-          "reprovado": true
+          "reprovado": false
         },
         {
           "idVaga": 2,
@@ -40,7 +40,7 @@
       "id": 2
     },
     {
-      "tipo": "1",
+      "tipo": "2",
       "nome": "Joãozinho Full Stack",
       "dataNascimento": "01/01/1900",
       "email": "joaozinho@react.com.br",
