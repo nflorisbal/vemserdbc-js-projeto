@@ -658,28 +658,22 @@ const buscarCandidatos = async () => {
     permissoesUsuario(usuarioLogado.tipo);
 }
 
-const trocarFuncionalidadeBotoes = async () => {
+const trocarFuncionalidadeBotoes = () => {
     const divBtns = document.getElementById('jobs-details-btns');
     divBtns.removeChild(divBtns.lastChild);
 
     const btnCandidatar = document.createElement('button');
     adicionarAtributos(btnCandidatar, 'btn-apply-job', ['btn', 'btn-dark']);
     divBtns.appendChild(btnCandidatar);
-
-    try {
-        const resolve = await axios.get(USUARIOS_URL);
-
-        resolve.data.forEach(candidato => {
-            if (candidato.candidaturas.some(candidatura =>
-                candidatura.reprovado && candidatura.idVaga === vagaSelecionada.id)) {
-                btnCandidatar.disabled = true;
-                btnCandidatar.classList.add('btn-secondary');
-                btnCandidatar.classList.remove('btn-dark');
-            }
-        })
-    } catch (reject) {
-        console.log(`Ocorreu algum erro ao buscar candidatos a vaga. (${reject})`);
-    }
+    
+    let naoPodeCandidatar = usuarioLogado.candidaturas.find(candidatura => candidatura.idVaga === vagaSelecionada.id) 
+    
+    if(naoPodeCandidatar !== undefined)
+        if(naoPodeCandidatar.reprovado && undefined) {
+            btnCandidatar.disabled = true;
+            btnCandidatar.classList.add('btn-secondary');
+            btnCandidatar.classList.remove('btn-dark');
+        }
 
     if (vagaSelecionada.candidatos.some(candidato => candidato.idCandidato === usuarioLogado.id)) {
         btnCandidatar.textContent = 'Cancelar Candidatura';

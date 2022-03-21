@@ -39,18 +39,24 @@
       "tipo": "2",
       "nome": "César Luchesi",
       "dataNascimento": "01/01/2000",
-      "email": "b",
-      "senha": "b",
+      "email": "cesar@cesar.com",
+      "senha": "Abc@1234",
       "candidaturas": [],
       "id": 2
     },
     {
-      "tipo": "2",
+      "tipo": "1",
       "nome": "Joãozinho Full Stack",
       "dataNascimento": "01/01/1900",
-      "email": "joaozinho@react.com.br",
-      "senha": "Abc@1234",
-      "candidaturas": [],
+      "email": "c",
+      "senha": "c",
+      "candidaturas": [
+        {
+          "idVaga": 1,
+          "idCandidato": 3,
+          "reprovado": false
+        }
+      ],
       "id": 3
     },
     {
@@ -76,15 +82,6 @@
       "senha": "Abc@1234",
       "candidaturas": [],
       "id": 5
-    },
-    {
-      "tipo": "2",
-      "nome": "Novo Recrutador",
-      "dataNascimento": "01/01/1999",
-      "email": "recrutador@recrutador.com",
-      "senha": "Abc@1234",
-      "candidaturas": [],
-      "id": 6
     }
   ],
   "vagas": [
@@ -101,6 +98,11 @@
         {
           "idVaga": 1,
           "idCandidato": 1,
+          "reprovado": false
+        },
+        {
+          "idVaga": 1,
+          "idCandidato": 3,
           "reprovado": false
         }
       ],
