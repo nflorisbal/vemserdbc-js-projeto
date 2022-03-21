@@ -522,17 +522,13 @@ const excluirVaga = async () => {
             console.log(`Ocorreu algum erro ao excluir a vaga. (${reject})`);
         });
 
-        // debugger;
-
         await axios.get(USUARIOS_URL).then(resolve => {
             resolve.data.forEach(usuario => {
                 let candidaturasSemVagaExcluida = usuario.candidaturas.filter(vaga => vaga.idVaga !== vagaSelecionada.id);
                 usuario.candidaturas = candidaturasSemVagaExcluida;
-                // console.log(usuario.candidaturas);
-                // debugger;
-                
+                         
                 axios.put(`${USUARIOS_URL}/${usuario.id}`, usuario).then(resolve => {
-                    console.log(resolve.data);
+                    // console.log(resolve.data);
                 }, reject => {
                     console.log(`Ocorreu algum erro ao atualiza vaga removida das candidaturas. (${reject})`);
                 });
@@ -568,6 +564,7 @@ const candidatarVaga = () => {
 }
 
 const removerCandidatura = () => {
+
     usuarioLogado.candidaturas = usuarioLogado.candidaturas.filter(e => e.idVaga !== vagaSelecionada.id);
     vagaSelecionada.candidatos = vagaSelecionada.candidatos.filter(e => e.idCandidato !== usuarioLogado.id);
 
@@ -589,6 +586,19 @@ const removerCandidatura = () => {
     
     buscarCandidatos(vagaSelecionada.id);
     trocarFuncionalidadeBotoes();
+}
+
+const reprovarCandidato = (candidato, vaga) => {
+    candidato.candidaturas.map(candidatura => {
+        if(candidatura.idVaga === vaga.id) candidatura.reprovado = true;
+    });
+
+    axios.put(`${USUARIOS_URL}/${candidato.id}`, candidato).then(resolve => {
+        const btnReprovar = document.getElementById(`btn-reprove-${candidato.id}`);
+        btnReprovar.disabled = true;
+    }, reject => {
+        console.log(`Ocorreu algum erro ao atualiza vaga removida das candidaturas. (${reject})`);
+    });
 }
 
 const buscarCandidatos = async id => {
@@ -622,6 +632,8 @@ const buscarCandidatos = async id => {
             adicionarAtributos(divData, `div-data-${candidato.id}`, ['col', 'text-data']);
             adicionarAtributos(divBtn, `div-btn-${candidato.id}`, ['col', 'text-end', 'btn-fail']);
             adicionarAtributos(btnReprovar, `btn-reprove-${candidato.id}`, ['btn', 'btn-danger']);
+
+            btnReprovar.addEventListener('click', () => reprovarCandidato(candidato, vagaSelecionada));
 
             divNome.textContent = `${candidato.nome}`;
             divData.textContent = `${candidato.dataNascimento}`;

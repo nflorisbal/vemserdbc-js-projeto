@@ -10,7 +10,7 @@
         {
           "idVaga": 1,
           "idCandidato": 1,
-          "reprovado": false
+          "reprovado": true
         },
         {
           "idVaga": 2,
@@ -19,6 +19,11 @@
         },
         {
           "idVaga": 3,
+          "idCandidato": 1,
+          "reprovado": false
+        },
+        {
+          "idVaga": 4,
           "idCandidato": 1,
           "reprovado": false
         }
@@ -35,7 +40,7 @@
       "id": 2
     },
     {
-      "tipo": "2",
+      "tipo": "1",
       "nome": "Joãozinho Full Stack",
       "dataNascimento": "01/01/1900",
       "email": "joaozinho@react.com.br",
@@ -103,6 +108,19 @@
         }
       ],
       "id": 3
+    },
+    {
+      "titulo": "Analista de Sistemas",
+      "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
+      "remuneracao": "R$ 3.000,00",
+      "candidatos": [
+        {
+          "idVaga": 4,
+          "idCandidato": 1,
+          "reprovado": false
+        }
+      ],
+      "id": 4
     }
   ]
 }
