@@ -114,11 +114,6 @@ const voltarCadastro = () => {
     irPara('registration', 'login')
 }
 
-// const apagarComponentes = (elemento) => {
-//     const componente = document.getElementById(elemento);
-//     componente.remove();
-// }
-
 const primeiraLetra = string => {
     array = string.split(' ');
 
@@ -132,9 +127,13 @@ const primeiraLetra = string => {
 const permissoesUsuario = permissao => {
     const botoesCadastroVagas = document.getElementById('job-btns');
     const botaoSairCadastroVagas = document.getElementById('exit-btn');
+    const funcionalidadeReprovar = document.getElementsByClassName('btn-fail');
+    const colunaDataCandidatos = document.getElementsByClassName('text-data');
 
     switch (permissao) {
         case '1':
+            for(componente of funcionalidadeReprovar) componente.classList.add('d-none');
+            for(componente of colunaDataCandidatos) componente.classList.add('text-end');
             botaoSairCadastroVagas.classList.add('btn-dark');
             botoesCadastroVagas.classList.remove('justify-content-between');
             botoesCadastroVagas.classList.add('justify-content-center');
@@ -142,6 +141,8 @@ const permissoesUsuario = permissao => {
             document.getElementById('btn-remove-job').classList.add('d-none');
             break;
         case '2':
+            for(componente of funcionalidadeReprovar) componente.classList.remove('d-none');
+            for(componente of colunaDataCandidatos) componente.classList.remove('text-end');
             botaoSairCadastroVagas.classList.remove('btn-dark');
             botoesCadastroVagas.classList.add('justify-content-between');
             botoesCadastroVagas.classList.remove('justify-content-center');
@@ -520,6 +521,25 @@ const excluirVaga = async () => {
         }, reject => {
             console.log(`Ocorreu algum erro ao excluir a vaga. (${reject})`);
         });
+
+        // debugger;
+
+        await axios.get(USUARIOS_URL).then(resolve => {
+            resolve.data.forEach(usuario => {
+                let candidaturasSemVagaExcluida = usuario.candidaturas.filter(vaga => vaga.idVaga !== vagaSelecionada.id);
+                usuario.candidaturas = candidaturasSemVagaExcluida;
+                // console.log(usuario.candidaturas);
+                // debugger;
+                
+                axios.put(`${USUARIOS_URL}/${usuario.id}`, usuario).then(resolve => {
+                    console.log(resolve.data);
+                }, reject => {
+                    console.log(`Ocorreu algum erro ao atualiza vaga removida das candidaturas. (${reject})`);
+                });
+            });
+        }, reject => {
+            console.log(`Ocorreu algum erro ao excluir a vaga. (${reject})`);
+        });
     }
 }
 
@@ -551,6 +571,8 @@ const removerCandidatura = () => {
     usuarioLogado.candidaturas = usuarioLogado.candidaturas.filter(e => e.idVaga !== vagaSelecionada.id);
     vagaSelecionada.candidatos = vagaSelecionada.candidatos.filter(e => e.idCandidato !== usuarioLogado.id);
 
+    console.log(usuarioLogado.candidaturas);
+
     axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
         // console.log(resolve.data);
     }, reject => {
@@ -562,8 +584,9 @@ const removerCandidatura = () => {
     }, reject => {
         console.log(`Ocorreu algum erro ao remover o candidato a vaga. (${reject})`);
     });
+
     alert(`Candidatura cancelada com sucesso!`);
-    // irPara('jobs-details', 'list-jobs');
+    
     buscarCandidatos(vagaSelecionada.id);
     trocarFuncionalidadeBotoes();
 }
@@ -596,7 +619,7 @@ const buscarCandidatos = async id => {
             const btnReprovar = document.createElement('button');
 
             adicionarAtributos(divNome, `div-name-${candidato.id}`, ['col', 'text-start']);
-            adicionarAtributos(divData, `div-data-${candidato.id}`, ['col']);
+            adicionarAtributos(divData, `div-data-${candidato.id}`, ['col', 'text-data']);
             adicionarAtributos(divBtn, `div-btn-${candidato.id}`, ['col', 'text-end', 'btn-fail']);
             adicionarAtributos(btnReprovar, `btn-reprove-${candidato.id}`, ['btn', 'btn-danger']);
 
@@ -611,6 +634,8 @@ const buscarCandidatos = async id => {
     }, reject => {
         console.log(`Ocorreu algum erro ao buscar candidatos a vaga. (${reject})`);
     });
+
+    permissoesUsuario(usuarioLogado.tipo);
 }
 
 const trocarFuncionalidadeBotoes = () => {

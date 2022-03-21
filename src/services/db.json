@@ -6,7 +6,23 @@
       "dataNascimento": "18/10/1985",
       "email": "a",
       "senha": "a",
-      "candidaturas": [],
+      "candidaturas": [
+        {
+          "idVaga": 1,
+          "idCandidato": 1,
+          "reprovado": false
+        },
+        {
+          "idVaga": 2,
+          "idCandidato": 1,
+          "reprovado": false
+        },
+        {
+          "idVaga": 3,
+          "idCandidato": 1,
+          "reprovado": false
+        }
+      ],
       "id": 1
     },
     {
@@ -53,6 +69,11 @@
           "idVaga": 1,
           "idCandidato": 4,
           "reprovado": false
+        },
+        {
+          "idVaga": 1,
+          "idCandidato": 1,
+          "reprovado": false
         }
       ],
       "id": 1
@@ -61,22 +82,27 @@
       "titulo": "Analista de Testes",
       "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
       "remuneracao": "R$ 3.200,00",
-      "candidatos": [],
+      "candidatos": [
+        {
+          "idVaga": 2,
+          "idCandidato": 1,
+          "reprovado": false
+        }
+      ],
       "id": 2
     },
     {
       "titulo": "Desenvolvedor Java Senior",
       "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
       "remuneracao": "R$ 9.000,00",
-      "candidatos": [],
+      "candidatos": [
+        {
+          "idVaga": 3,
+          "idCandidato": 1,
+          "reprovado": false
+        }
+      ],
       "id": 3
-    },
-    {
-      "titulo": "Analista de Sistemas",
-      "descricao": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices placerat eros. Sed condimentum tincidunt fringilla. Donec nulla leo, egestas eu est nec, ullamcorper volutpat nulla. Cras posuere justo in.",
-      "remuneracao": "R$ 3.000,00",
-      "candidatos": [],
-      "id": 4
     }
   ]
 }
