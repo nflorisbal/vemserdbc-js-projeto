@@ -21,7 +21,6 @@ class Usuario {
     candidaturas = [];
 
     constructor(tipo, nome, dataNascimento, email, senha) {
-        // this.id = id;
         this.tipo = tipo;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
@@ -31,7 +30,6 @@ class Usuario {
 }
 
 class Candidatura {
-    // recebe as candidaturas do usuario e a vaga para qual se candidatou
     idVaga;
     idCandidato;
     reprovado = false;
@@ -46,7 +44,7 @@ class Vaga {
     id;
     titulo;
     descricao;
-    remuneracao; //(salvar no formato: R$ 3.200,50)
+    remuneracao;
     candidatos = [];
 
     constructor(id, titulo, descricao, remuneracao) {
@@ -58,7 +56,6 @@ class Vaga {
 }
 
 //#region Funções Utilitárias
-
 const adicionarAtributos = (elemento, id, classes) => {
     elemento.setAttribute('id', id);
     if (classes !== undefined) elemento.classList.add(...classes);
@@ -85,7 +82,6 @@ const recuperarSenha = async () => {
 
     try {
         const resolve = await axios.get(USUARIOS_URL);
-
         const usuario = resolve.data.find(e => e.email === email);
 
         if (usuario === undefined)
@@ -151,7 +147,6 @@ const permissoesUsuario = permissao => {
             break;
     }
 }
-
 //#endregion Funções Utilitárias
 
 //#region Validação Inputs Usuário
@@ -172,7 +167,6 @@ const validarNome = () => {
 
     return ehValido;
 }
-
 //#endregion Validação Nome
 
 //#region Validação Data
@@ -280,7 +274,6 @@ const validarSenha = () => {
 //#endregion #region Validação Inputs Usuário
 
 //#region Validação Inputs Vaga
-
 const validarTitulo = () => {
     const tituloInput = document.getElementById('title-input-registration');
     const titulo = tituloInput.value;
@@ -346,16 +339,16 @@ const mascaraRemuneracao = (input, remuneracao) => {
         }
     }
 }
-
 //#endregion Validação Inputs Vaga
 
-const validarLogin = () => {
-
+const validarLogin = async () => {
     const email = document.getElementById('email-input-login');
     const senha = document.getElementById('password-input-login');
     const erro = document.getElementById('login-error');
 
-    axios.get(USUARIOS_URL).then(resolve => {
+    try {
+        const resolve = await axios.get(USUARIOS_URL);
+
         usuarioLogado = resolve.data.find(e => e.email === email.value && e.senha === senha.value);
 
         if (usuarioLogado === undefined)
@@ -367,9 +360,9 @@ const validarLogin = () => {
             permissoesUsuario(usuarioLogado.tipo);
             buscarVagas();
         }
-    }, reject => {
+    } catch (reject) {
         console.log(`Ocorreu alguma erro durante o login. (${reject})`);
-    });
+    }
 }
 
 const validarCadastroUsuario = event => {
@@ -381,7 +374,7 @@ const validarCadastroUsuario = event => {
     }
 }
 
-const cadastrarUsuario = event => {
+const cadastrarUsuario = async event => {
     event.preventDefault();
 
     let tipo = document.getElementById('lista-tipo-usuario');
@@ -394,13 +387,13 @@ const cadastrarUsuario = event => {
 
     const usuario = new Usuario(tipo.value, nome.value, dataNascimento.value, email.value, senha.value);
 
-    axios.post(USUARIOS_URL, usuario)
-        .then((resolve) => {
-            alert('Cadastro realizado com sucesso!')
-            irPara('registration', 'login');
-        }, (reject) => {
-            console.log(`Ocorreu algum erro durante o cadastro do usuário. (${reject})`);
-        });
+    try {
+        await axios.post(USUARIOS_URL, usuario);
+        alert('Cadastro realizado com sucesso!');
+        irPara('registration', 'login');
+    } catch (reject) {
+        console.log(`Ocorreu algum erro durante o cadastro do usuário. (${reject})`);
+    }
 
     limparCampos(tipo, nome, dataNascimento, email, senha);
 }
@@ -413,7 +406,7 @@ const validarCadastroVaga = event => {
     }
 }
 
-const cadastrarVaga = event => {
+const cadastrarVaga = async event => {
     event.preventDefault();
 
     let titulo = document.getElementById('title-input-registration');
@@ -422,27 +415,28 @@ const cadastrarVaga = event => {
 
     const vaga = new Vaga(undefined, titulo.value, descricao.value, remuneracao.value);
 
-    axios.post(VAGAS_URL, vaga)
-        .then((resolve) => {
-            const ul = document.getElementById('ul-vagas');
-            const li = document.createElement('li');
+    try {
+        const resolve = await axios.post(VAGAS_URL, vaga);
 
-            adicionarAtributos(li, `li-vaga-${resolve.data.id}`, CLASS_LI_VAGA);
-            ul.appendChild(li);
+        const ul = document.getElementById('ul-vagas');
+        const li = document.createElement('li');
 
-            const spanTitulo = document.createElement('span');
-            const spanRemuneracao = document.createElement('span');
-            spanTitulo.textContent = `Vaga: ${resolve.data.titulo}`;
-            spanRemuneracao.textContent = `Remuneração: ${resolve.data.remuneracao}`;
-            li.append(spanTitulo, spanRemuneracao);
-            li.addEventListener('click', detalharVaga);
+        adicionarAtributos(li, `li-vaga-${resolve.data.id}`, CLASS_LI_VAGA);
+        ul.appendChild(li);
 
-            alert('Vaga cadastrada com sucesso!');
+        const spanTitulo = document.createElement('span');
+        const spanRemuneracao = document.createElement('span');
+        spanTitulo.textContent = `Vaga: ${resolve.data.titulo}`;
+        spanRemuneracao.textContent = `Remuneração: ${resolve.data.remuneracao}`;
+        li.append(spanTitulo, spanRemuneracao);
+        li.addEventListener('click', detalharVaga);
 
-            irPara('jobs-registration', 'list-jobs');
-        }, (reject) => {
-            console.log(`Ocorreu algum erro durante o cadastro da vaga. (${reject})`);
-        });
+        alert('Vaga cadastrada com sucesso!');
+
+        irPara('jobs-registration', 'list-jobs');
+    } catch (reject) {
+        console.log(`Ocorreu algum erro durante o cadastro da vaga. (${reject})`);
+    }
 
     limparCampos(titulo, descricao, remuneracao);
 }
@@ -453,7 +447,9 @@ const buscarVagas = async () => {
     const ul = document.getElementById('ul-vagas');
     if (ul !== null) ul.remove();
 
-    await axios.get(VAGAS_URL).then(resolve => {
+    try{
+        const resolve = await axios.get(VAGAS_URL);
+
         const div = document.getElementById('div-vagas');
         const ul = document.createElement('ul');
         ul.setAttribute('id', 'ul-vagas');
@@ -465,18 +461,16 @@ const buscarVagas = async () => {
             li.addEventListener('click', detalharVaga);
             const spanTitulo = document.createElement('span');
             spanTitulo.setAttribute('id', `span-titulo-${e.id}`)
-            // spanTitulo.addEventListener('click', detalharVaga);
             spanTitulo.textContent = `Vaga: ${e.titulo}`;
             const spanRemuneracao = document.createElement('span');
             spanRemuneracao.setAttribute('id', `span-remuneracao-${e.id}`)
-            // spanRemuneracao.addEventListener('click', detalharVaga);
             spanRemuneracao.textContent = `Remuneração: ${e.remuneracao}`;
             ul.appendChild(li);
             li.append(spanTitulo, spanRemuneracao);
         });
-    }, reject => {
+    } catch (reject) {
         console.log(`Ocorreu alguma erro a busca das vagas. (${reject})`);
-    });
+    }
 }
 
 const detalharVaga = async event => {
@@ -487,7 +481,9 @@ const detalharVaga = async event => {
     const div = document.getElementById('jobs-content-position');
     while (div.firstChild) div.removeChild(div.firstChild);
 
-    await axios.get(`${VAGAS_URL}/${idElemento}`).then(resolve => {
+    try {
+        const resolve = await axios.get(`${VAGAS_URL}/${idElemento}`);
+
         const divVaga = document.createElement('div');
         adicionarAtributos(divVaga, `jobs-content-details-${resolve.data.id}`, CLASS_DIV_VAGA);
         div.appendChild(divVaga);
@@ -505,57 +501,59 @@ const detalharVaga = async event => {
         buscarCandidatos();
 
         trocarFuncionalidadeBotoes();
-    }, reject => {
+    } catch (reject) {
         console.log(`Ocorreu algum erro ao detalhar a vaga. (${reject})`);
-    });
+    }
 
     irPara('list-jobs', 'jobs-details');
 }
 
 const excluirVaga = async () => {
     if (confirm(`Deseja remover a vaga ${vagaSelecionada.titulo}?`)) {
-        await axios.delete(`${VAGAS_URL}/${vagaSelecionada.id}`).then(resolve => {
+        try {
+            await axios.delete(`${VAGAS_URL}/${vagaSelecionada.id}`);
             const li = document.getElementById(`li-vaga-${vagaSelecionada.id}`);
             li.remove();
             irPara('jobs-details', 'list-jobs');
-        }, reject => {
+        } catch (reject) {
             console.log(`Ocorreu algum erro ao excluir a vaga. (${reject})`);
-        });
+        }
 
-        await axios.get(USUARIOS_URL).then(resolve => {
-            resolve.data.forEach(usuario => {
+        try {
+            const resolve = await axios.get(USUARIOS_URL);
+            resolve.data.forEach(async usuario => {
                 let candidaturasSemVagaExcluida = usuario.candidaturas.filter(vaga => vaga.idVaga !== vagaSelecionada.id);
                 usuario.candidaturas = candidaturasSemVagaExcluida;
 
-                axios.put(`${USUARIOS_URL}/${usuario.id}`, usuario).then(resolve => {
-                    // console.log(resolve.data);
-                }, reject => {
-                    console.log(`Ocorreu algum erro ao atualiza vaga removida das candidaturas. (${reject})`);
-                });
+                try {
+                    axios.put(`${USUARIOS_URL}/${usuario.id}`, usuario);
+                } catch (reject) {
+                    console.log(`Ocorreu algum erro ao excluir a vaga do usuario. (${reject})`);
+                }
             });
-        }, reject => {
-            console.log(`Ocorreu algum erro ao excluir a vaga. (${reject})`);
-        });
+        } catch (reject) {
+            console.log(`Ocorreu algum erro ao buscar usuario para excluir a vaga. (${reject})`);
+        }
     }
 }
 
-const candidatarVaga = () => {
+const candidatarVaga = async () => {
     let candidatura = new Candidatura(vagaSelecionada.id, usuarioLogado.id);
 
     usuarioLogado.candidaturas.push(candidatura);
     vagaSelecionada.candidatos.push(candidatura);
 
-    axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
-        // console.log(resolve.data);
-    }, reject => {
+    try{
+        await axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado);
+    } catch (reject) {
         console.log(`Ocorreu algum erro ao candidatar-se a vaga. (${reject})`);
-    });
+    }
 
-    axios.put(`${VAGAS_URL}/${vagaSelecionada.id}`, vagaSelecionada).then(resolve => {
-        // console.log(resolve.data);
-    }, reject => {
+    try{
+        await axios.put(`${VAGAS_URL}/${vagaSelecionada.id}`, vagaSelecionada);
+    } catch (reject) {
         console.log(`Ocorreu algum erro ao registrar o candidato a vaga. (${reject})`);
-    });
+    }
 
     alert(`Candidatura realizada com sucesso!`);
 
@@ -563,21 +561,21 @@ const candidatarVaga = () => {
     buscarCandidatos(vagaSelecionada.id);
 }
 
-const removerCandidatura = () => {
+const removerCandidatura = async () => {
     usuarioLogado.candidaturas = usuarioLogado.candidaturas.filter(e => e.idVaga !== vagaSelecionada.id);
     vagaSelecionada.candidatos = vagaSelecionada.candidatos.filter(e => e.idCandidato !== usuarioLogado.id);
 
-    axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado).then(resolve => {
-        // console.log(resolve.data);
-    }, reject => {
+    try {
+        await axios.put(`${USUARIOS_URL}/${usuarioLogado.id}`, usuarioLogado);
+    } catch (reject) {
         console.log(`Ocorreu algum erro ao remover a candidatura. (${reject})`);
-    });
+    }
 
-    axios.put(`${VAGAS_URL}/${vagaSelecionada.id}`, vagaSelecionada).then(resolve => {
-        // console.log(resolve.data);
-    }, reject => {
+    try {
+        await axios.put(`${VAGAS_URL}/${vagaSelecionada.id}`, vagaSelecionada);
+    } catch (reject) {
         console.log(`Ocorreu algum erro ao remover o candidato a vaga. (${reject})`);
-    });
+    }
 
     alert(`Candidatura cancelada com sucesso!`);
 
@@ -591,14 +589,14 @@ const reprovarCandidato = async (candidato, vaga) => {
     });
 
     try {
-        const resolve = await axios.put(`${USUARIOS_URL}/${candidato.id}`, candidato);
+        await axios.put(`${USUARIOS_URL}/${candidato.id}`, candidato);
 
         const btnReprovar = document.getElementById(`btn-reprove-${candidato.id}`);
         btnReprovar.disabled = true;
         btnReprovar.classList.add('btn-secondary');
         btnReprovar.classList.remove('btn-danger');
     } catch (reject) {
-        console.log(`Ocorreu algum erro ao atualiza vaga removida das candidaturas. (${reject})`);
+        console.log(`Ocorreu algum erro ao atualizar vaga removida das candidaturas. (${reject})`);
     }
 }
 
@@ -606,7 +604,9 @@ const buscarCandidatos = async () => {
     const div = document.getElementById('div-candidates');
     if (div !== null) div.remove();
 
-    await axios.get(USUARIOS_URL).then(resolve => {
+    try {
+        const resolve = await axios.get(USUARIOS_URL);
+
         let candidatos = [];
 
         resolve.data.forEach(usuario => {
@@ -650,10 +650,10 @@ const buscarCandidatos = async () => {
             divBtn.appendChild(btnReprovar);
             divCandidato.append(divNome, divData, divBtn);
             divCandidatos.appendChild(divCandidato);
-        })
-    }, reject => {
+        });
+    } catch (reject) {
         console.log(`Ocorreu algum erro ao buscar candidatos a vaga. (${reject})`);
-    });
+    }
 
     permissoesUsuario(usuarioLogado.tipo);
 }
@@ -668,8 +668,6 @@ const trocarFuncionalidadeBotoes = async () => {
 
     try {
         const resolve = await axios.get(USUARIOS_URL);
-
-        // debugger;
 
         resolve.data.forEach(candidato => {
             if (candidato.candidaturas.some(candidatura =>
@@ -692,5 +690,4 @@ const trocarFuncionalidadeBotoes = async () => {
     } else {
         btnCandidatar.classList.add('d-none');
     }
-
 }
